@@ -26,7 +26,7 @@ public class TestJackson_UnSerial {
         return "{                                 " +
                 "    \"email\" : \"wakanda@gmail.fr\",                 " +
                 "    \"updated\" : \"1349333576093\",          " +
-                "    \"position\" : true,                  " +
-                "}                                 ";
+                "    \"position\" : true                  " +
+                "}                                ";
     }
 }
