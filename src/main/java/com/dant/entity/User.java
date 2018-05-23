@@ -9,6 +9,7 @@ public class User {
     //private InvitationRequest invitationRequest;
     private Boolean isConnected = false;
     private Boolean isVisible = false;
+    private Coordinate coordinate;
 
     //private FriendList friendList;
 
@@ -17,6 +18,10 @@ public class User {
         this.pseudo = pseudo;
         this.email = email;
         //this.friendList = new FriendList();
+
+    }
+
+    public User() {
 
     }
 
@@ -34,6 +39,12 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Coordinate getCoordinate(){return coordinate;}
+
+    public void setCoordinate(Coordinate coordinate){
+        this.coordinate = coordinate;
     }
 
     public String getContact() {

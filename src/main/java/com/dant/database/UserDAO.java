@@ -1,12 +1,12 @@
 package com.dant.database;
 
 import com.dant.entity.User;
+import com.dant.entity.dto.CoordinateDTO;
 import com.dant.exception.InternalServerException;
 
-import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,9 +18,18 @@ public class UserDAO implements DAO<User> {
         this.connection = Database.connect();
     }
 
+    PreparedStatement preparedStatement = null;
+
     @Override
     public void save(User object) {
-        try (Statement st = connection.createStatement()) {
+
+        try(Statement st = connection.createStatement()){
+            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
+            preparedStatement.setString(1, object.getPseudo());
+            preparedStatement.setString(2, object.getEmail());
+            preparedStatement.executeUpdate();
+            st.execute("INSERT INTO user(pseudo, email) VALUES(" +object.getPseudo() +"," +object.getEmail() +");");
+            //st = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
 
         } catch (SQLException e) {
             throw new InternalServerException(e);
@@ -29,8 +38,13 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public User get(String key) {
-        return null;
+    public User get(String key){
+        try(Statement st = connection.createStatement()){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        User user= new User();
+        return new User();
     }
 
     @Override
@@ -45,6 +59,21 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public List<User> getAll() {
+        List<User> users = new ArrayList<User>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM user;");
+            while(result.next()){
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                CoordinateDTO coord = new CoordinateDTO(result.getDouble("xCoordinates"),
+                        result.getDouble("yCoordinates"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         return Collections.emptyList();
     }
 }
