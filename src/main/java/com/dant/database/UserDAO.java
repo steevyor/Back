@@ -1,5 +1,6 @@
 package com.dant.database;
 
+import com.dant.entity.Coordinate;
 import com.dant.entity.User;
 import com.dant.entity.dto.CoordinateDTO;
 import com.dant.exception.InternalServerException;
@@ -66,7 +67,7 @@ public class UserDAO implements DAO<User> {
             while(result.next()){
                 String pseudo = result.getString("pseudo");
                 String email = result.getString("email");
-                CoordinateDTO coord = new CoordinateDTO(result.getDouble("xCoordinates"),
+                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates"));
             }
         } catch (SQLException e) {
