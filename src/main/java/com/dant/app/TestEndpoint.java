@@ -1,6 +1,6 @@
 package com.dant.app;
 
-import com.dant.entity.Account;
+//import com.dant.entity.Account;
 
 import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
@@ -33,6 +33,7 @@ public class TestEndpoint {
 		return ids;
 	}
 
+	/*
 	@POST
 	@Path("/entity")
 	public Account getAccount(Account account) {
@@ -41,10 +42,11 @@ public class TestEndpoint {
 		return account;
 	}
 
+
 	@GET
 	@Path("/exception")
 	public Response exception() {
 		throw new RuntimeException("Mon erreur");
 	}
-
+*/
 }
