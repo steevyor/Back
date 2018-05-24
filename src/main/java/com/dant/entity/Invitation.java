@@ -11,6 +11,12 @@ public class Invitation {
         this.recepterId = recepterId;
 
     }
+    public Invitation(){
+
+        this.emitterId = "";
+        this.recepterId = "";
+
+    }
 
     public String getEmitterId() {
         return emitterId;
