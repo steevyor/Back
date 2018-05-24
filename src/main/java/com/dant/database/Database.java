@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.mysql.jdbc.ResultSetMetaData;
+//import com.mysql.jdbc.ResultSetMetaData;
 import java.util.ArrayList;
 
 public class Database {

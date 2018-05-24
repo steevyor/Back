@@ -1,5 +1,6 @@
 package com.dant.database;
 
+import com.dant.entity.Coordinate;
 import com.dant.entity.User;
 import com.dant.entity.dto.CoordinateDTO;
 import com.dant.exception.InternalServerException;
@@ -39,7 +40,15 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User get(String key){
+        ResultSet result = null;
         try(Statement st = connection.createStatement()){
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =" +key +";");
+            String pseudo = result.getString("pseudo");
+            String email = result.getString("email");
+            User user = new User(pseudo,email);
+            user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
+                    result.getDouble("yCoordinates")));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,6 +66,10 @@ public class UserDAO implements DAO<User> {
         return object;
     }
 
+    public void updateCoordinates(User objet){
+
+    }
+
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<User>();
@@ -66,7 +79,7 @@ public class UserDAO implements DAO<User> {
             while(result.next()){
                 String pseudo = result.getString("pseudo");
                 String email = result.getString("email");
-                CoordinateDTO coord = new CoordinateDTO(result.getDouble("xCoordinates"),
+                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates"));
             }
         } catch (SQLException e) {
