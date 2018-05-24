@@ -1,11 +1,11 @@
 package com.dant.entity;
 
-public class InvitationDemand {
+public class Invitation {
 
     private String emitterId;
     private String recepterId;
 
-    public InvitationDemand(String emitterId, String recepterId){
+    public Invitation(String emitterId, String recepterId){
 
         this.emitterId = emitterId;
         this.recepterId = recepterId;
