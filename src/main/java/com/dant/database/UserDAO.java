@@ -40,7 +40,15 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User get(String key){
+        ResultSet result = null;
         try(Statement st = connection.createStatement()){
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =" +key +";");
+            String pseudo = result.getString("pseudo");
+            String email = result.getString("email");
+            User user = new User(pseudo,email);
+            user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
+                    result.getDouble("yCoordinates")));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,6 +64,10 @@ public class UserDAO implements DAO<User> {
     @Override
     public User update(User object) {
         return object;
+    }
+
+    public void updateCoordinates(User objet){
+
     }
 
     @Override
