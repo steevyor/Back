@@ -4,7 +4,7 @@ public class User {
 
     private String pseudo;
     private String email;
-    private String contact;
+    private FriendList friendList;
     //private InvitationDemand invitationDemands;
     //private InvitationRequest invitationRequest;
     private Boolean isConnected = false;
@@ -47,12 +47,12 @@ public class User {
         this.coordinate = coordinate;
     }
 
-    public String getContact() {
-        return contact;
+    public FriendList getFriendList() {
+        return this.friendList;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setFriendList(FriendList friendList) {
+        this.friendList = friendList;
     }
     /*
     public void getInvitationDemands() {
