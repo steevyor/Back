@@ -15,7 +15,7 @@ public class TokenGenerator{
     public String generateToken() {
         long longToken = Math.abs( random.nextLong() );
         String random = Long.toString( longToken, 32);
-        return (random+getTime());
+        return (random);
 
     }
 
@@ -23,10 +23,5 @@ public class TokenGenerator{
         String preftoken = generateToken();
         return (preftoken+".datetime="+var);
 
-    }
-
-    public String getTime(){
-        Date d = new Date();
-        return String.valueOf(d.getDay());
     }
 }
