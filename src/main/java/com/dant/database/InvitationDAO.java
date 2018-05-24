@@ -94,9 +94,7 @@ public class InvitationDAO implements  DAO<Invitation>{
             e.printStackTrace();
         }
 
-
-        return Collections.emptyList();
-
+        return invitations;
 
     }
 
