@@ -82,13 +82,14 @@ public class UserDAO implements DAO<User> {
                 String email = result.getString("email");
                 Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates"));
+                users.add(new User(pseudo, email));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
-        return Collections.emptyList();
+        return users;
     }
 
     public Coordinate getCoordinates(String key){
