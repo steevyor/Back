@@ -8,6 +8,10 @@ public class InvitationRequestTable {
        this.list = new ArrayList<Invitation>();
     }
 
+    public InvitationRequestTable(ArrayList<Invitation> list){
+        this.list = list;
+    }
+
     public void setList(ArrayList<Invitation> list) {
         this.list = list;
     }
