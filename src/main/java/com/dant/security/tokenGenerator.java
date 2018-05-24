@@ -13,13 +13,13 @@ import java.security.SecureRandom;
 @Path("/Token")
 @Produces(MediaType.APPLICATION_JSON)
 
-public class TokenGenerator{
+public class tokenGenerator {
 
     protected static SecureRandom random = new SecureRandom();
     protected long timer;
 
 
-    public TokenGenerator(){
+    public tokenGenerator(){
     }
 
     public String generateToken() {
@@ -34,8 +34,8 @@ public class TokenGenerator{
 
     }
 
-    static TokenGenerator TokenGenerator() {
-        TokenGenerator token = new TokenGenerator();
+    static tokenGenerator TokenGenerator() {
+        tokenGenerator token = new tokenGenerator();
         token.generateToken();
         token.setMillis();
         return token;

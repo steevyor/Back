@@ -2,10 +2,15 @@ package com.dant.app;
 
 //import com.dant.entity.Account;
 
+import com.dant.database.Database;
+import com.dant.database.UserDAO;
+import com.dant.entity.User;
+
 import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,11 +30,17 @@ public class TestEndpoint {
 	@GET
 	@Path("/list")
 	public List<String> getListInParams(@QueryParam("ids") List<String> ids) {
-		ids.add("Sonia");
+		/*ids.add("Sonia");
 		ids.add("Henri");
 		ids.add("Guillaume");
 		ids.add("Alex");
 		System.out.println(ids);
+		return ids;*/
+		UserDAO user = new UserDAO();
+		List<User> list = user.getAll();
+		for(User u : list){
+			ids.add(u.getPseudo() + " " + u.getEmail());
+		}
 		return ids;
 	}
 
