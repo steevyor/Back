@@ -5,8 +5,8 @@ public class User {
     private String pseudo;
     private String email;
     private FriendList friendList;
-    private InvitationDemand invitationDemands;
-    private InvitationRequest invitationRequest;
+    private InvitationDemandTable invitationDemands;
+    private InvitationRequestTable invitationRequest;
     private Boolean isConnected;
     private Boolean isVisible;
     private Coordinate coordinate;
@@ -57,11 +57,11 @@ public class User {
 
     public void getInvitationDemands() { this.invitationDemands = invitationDemands;  }
 
-    public void setInvitationDemands(InvitationDemand invitationDemands) { this.invitationDemands = invitationDemands; }
+    public void setInvitationDemands(InvitationDemandTable invitationDemands) { this.invitationDemands = invitationDemands; }
 
     public void getInvitationRequest() { this.invitationRequest = invitationRequest  ; }
 
-    public void setInvitationRequest(InvitationRequest invitationRequest) {this.invitationRequest = invitationRequest; }
+    public void setInvitationRequest(InvitationRequestTable invitationRequest) {this.invitationRequest = invitationRequest; }
 
     public Boolean getConnected() {
         return isConnected;
