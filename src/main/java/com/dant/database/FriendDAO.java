@@ -17,7 +17,7 @@ public class FriendDAO implements DAO<Friend> {
     @Override
     public void save(Friend object) {
         try (Statement st = connection.createStatement()) {
-
+            st.execute("INSERT INTO friendships VALUES ");
         } catch (SQLException e) {
             throw new InternalServerException(e);
         }

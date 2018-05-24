@@ -5,20 +5,20 @@ public class User {
     private String pseudo;
     private String email;
     private FriendList friendList;
-    //private InvitationDemand invitationDemands;
-    //private InvitationRequest invitationRequest;
-    private Boolean isConnected = false;
-    private Boolean isVisible = false;
+    private InvitationDemand invitationDemands;
+    private InvitationRequest invitationRequest;
+    private Boolean isConnected;
+    private Boolean isVisible;
     private Coordinate coordinate;
 
-    //private FriendList friendList;
 
-    public User( String pseudo , String email){
+    public User(String pseudo , String email){
 
         this.pseudo = pseudo;
         this.email = email;
-        //this.friendList = new FriendList();
-
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
     }
 
     public User() {
@@ -54,24 +54,15 @@ public class User {
     public void setFriendList(FriendList friendList) {
         this.friendList = friendList;
     }
-    /*
-    public void getInvitationDemands() {
-        this.invitationDemands = invitationDemands;
-    }
 
-    public void setInvitationDemands(InvitationDemand invitationDemands) {
-        this.invitationDemands = invitationDemands;
-    }
+    public void getInvitationDemands() { this.invitationDemands = invitationDemands;  }
 
-    public void getInvitationRequest() {
-        this.invitationRequest = invitationRequest  ;
-        ;
-    }
+    public void setInvitationDemands(InvitationDemand invitationDemands) { this.invitationDemands = invitationDemands; }
 
-    public void setInvitationRequest(InvitationRequest invitationRequest) {
-        this.invitationRequest = invitationRequest;
-    }
-    */
+    public void getInvitationRequest() { this.invitationRequest = invitationRequest  ; }
+
+    public void setInvitationRequest(InvitationRequest invitationRequest) {this.invitationRequest = invitationRequest; }
+
     public Boolean getConnected() {
         return isConnected;
     }
