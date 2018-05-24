@@ -10,12 +10,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.mysql.jdbc.ResultSetMetaData;
+//import com.mysql.jdbc.ResultSetMetaData;
 import java.util.ArrayList;
 
 public class Database {
 
-    private static String url = "jdbc:mysql://localhost:3306/mydb";
+    //private static String url = "jdbc:mysql://localhost:3306/locappdb";
+    private static  String url = "jdbc:mysql://localhost/locappdb?useLegacyDatetimeCode=false&serverTimezone=Europe/Paris";
     private static String utilisateur = "root";
     private static String motDePasse = "root";
 
