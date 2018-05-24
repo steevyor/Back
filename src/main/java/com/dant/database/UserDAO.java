@@ -90,4 +90,32 @@ public class UserDAO implements DAO<User> {
 
         return Collections.emptyList();
     }
+
+    public Coordinate getCoordinates(String key){
+        try (Statement st = connection.createStatement()) {
+            ResultSet result = st.executeQuery("SELECT xCoordinates, yCoordinates FROM user WHERE pseudo =" +key +";");
+            double x = result.getDouble("xCoordinates");
+            double y = result.getDouble("yCoordinates");
+            return new Coordinate(x,y);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void setCoordinatesNull(String key){
+        try (Statement st = connection.createStatement()) {
+            st.execute("UPDATE user SET xCoordinates = 0, yCoordinates = 0 FROM user WHERE pseudo =" +key +";");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCoordinates(Coordinate object, String key){
+        try (Statement st = connection.createStatement()) {
+            st.execute("UPDATE user SET xCoordinates =" +object.xCoordinate +", yCoordinates =" +object.yCoordinate +" FROM user WHERE pseudo =" +key +";");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
