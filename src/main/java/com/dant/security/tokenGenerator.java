@@ -45,6 +45,10 @@ public class tokenGenerator {
         this.timer = System.currentTimeMillis() % 1000;
     }
 
+    public long getTimer() {
+        return timer;
+    }
+
     public void json() throws JsonGenerationException,
             JsonMappingException, IOException {
 
