@@ -37,7 +37,7 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public User get(String key){
+    public User get(String key) throws SQLException {
         ResultSet result = null;
         try(Statement st = connection.createStatement()){
             result = st.executeQuery("SELECT * FROM user WHERE pseudo =" +key +";");
@@ -49,6 +49,7 @@ public class UserDAO implements DAO<User> {
             user.setFriendList(new FriendList());
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException();
         }
         User user= new User();
         return new User();

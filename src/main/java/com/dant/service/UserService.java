@@ -20,26 +20,32 @@ public class UserService {
     }
 
     public User authenticate(UserDTO dto) {
-        User user = dao.get(dto.pseudo);
-        if (user == null) {
-            throw new ForbiddenException();
-        }
-        if(user.getPassword() == Encripter.encrypt(dto.password)){
+        User user;
+        try {
+            user = dao.get(dto.pseudo);
+            if (user.getPassword() == Encripter.encrypt(dto.password)) {
 
+            }
+            // SI user.getPassword().equals(dto.password)
+            if (false) {
+                throw new ForbiddenException();
+            }
         }
-        // SI user.getPassword().equals(dto.password)
-        if (false) {
+        catch(SQLException e){
             throw new ForbiddenException();
         }
         return user;
     }
 
     public User inscription(UserDTO dto) {
-        User user = dao.get(dto.pseudo);
-        //Si le pseudo existe deja
-        if (user == null) {
-            throw new ForbiddenException();
-        } //else dao.save(user);
+        User user ;
+        try {
+            user = dao.get(dto.pseudo);
+            dao.save(user);
+        }catch(SQLException e){
+            user = new User(dto.pseudo, dto.email);
+
+        }
         return user;
     }
 
