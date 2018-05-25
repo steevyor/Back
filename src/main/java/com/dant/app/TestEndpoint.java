@@ -2,15 +2,20 @@ package com.dant.app;
 
 //import com.dant.entity.Account;
 
+import com.dant.database.Database;
+import com.dant.database.InvitationDAO;
+import com.dant.database.UserDAO;
+import com.dant.entity.Invitation;
+import com.dant.entity.User;
+
 import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pitton on 2017-02-20.
- */
+
 @Path("/api/test")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -24,12 +29,23 @@ public class TestEndpoint {
 
 	@GET
 	@Path("/list")
-	public List<String> getListInParams(@QueryParam("ids") List<String> ids) {
-		ids.add("Sonia");
+	public List<String> getListInParams(@QueryParam("ids") List<String> ids ) {
+		/*ids.add("Sonia");
 		ids.add("Henri");
 		ids.add("Guillaume");
 		ids.add("Alex");
 		System.out.println(ids);
+		return ids;*/
+		UserDAO user = new UserDAO();
+		InvitationDAO invit = new InvitationDAO();
+		List<Invitation> listInvit = invit.getAll();
+		List<User> listUsers = user.getAll();
+		/*for(User u : listUsers){
+			ids.add(u.getPseudo() + " " + u.getEmail());
+		}*/
+		for(Invitation i : listInvit){
+			ids.add(i.getEmitterId() + " a invité " + i.getRecepterId());
+		}
 		return ids;
 	}
 
@@ -49,4 +65,16 @@ public class TestEndpoint {
 		throw new RuntimeException("Mon erreur");
 	}
 */
+}
+
+@Path("/connection")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+class Connection{
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public void connect(@QueryParam("login") String login,
+						@QueryParam("password") String password){
+
+	}
 }

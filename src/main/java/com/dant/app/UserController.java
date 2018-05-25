@@ -3,11 +3,10 @@ package com.dant.app;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
 import com.dant.service.UserService;
+import com.mysql.cj.util.StringUtils;
+import org.jboss.resteasy.annotations.Form;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
 
@@ -26,7 +25,10 @@ public class UserController {
 
     @POST
     @Path("/auth")
-    public UserDTO authenticate(UserDTO dto) {
+    public UserDTO authenticate(UserDTO dto ) {
+        //verif
+        //crypt
+        //Commons lang = > StringUtils => is blank
         User user = userService.authenticate(dto);
         return new UserDTO(user);
     }
