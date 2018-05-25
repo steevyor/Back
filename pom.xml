@@ -24,7 +24,7 @@
 			<version>${resteasy.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl -->
+		<!-- jackson-mapper-asl -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
@@ -37,7 +37,12 @@
 			<version>1.9.13</version>
 		</dependency>
 
-
+		<!-- commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
+		</dependency>
 
 		<!-- Json lib -->
 		<dependency>
@@ -53,7 +58,7 @@
 			<version>2.9.7</version>
 		</dependency>
 		<!-- Database lib -->
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<!-- mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
