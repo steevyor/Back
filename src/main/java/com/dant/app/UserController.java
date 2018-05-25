@@ -2,10 +2,16 @@ package com.dant.app;
 
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
+import com.dant.security.Encripter;
 import com.dant.service.UserService;
+import com.mysql.cj.util.StringUtils;
+import org.jboss.resteasy.annotations.Form;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import java.sql.SQLException;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -33,7 +39,6 @@ public class UserController {
         System.out.println("Erreur");
         return dto;
     }
-
     @POST
     @Path("/inscription")
     public UserDTO inscription(UserDTO dto ) {
@@ -45,4 +50,5 @@ public class UserController {
         System.out.println("Erreur");
         return dto;
     }
+
 }

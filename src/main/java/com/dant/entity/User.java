@@ -10,6 +10,7 @@ public class User {
     private Boolean isConnected;
     private Boolean isVisible;
     private Coordinate coordinate;
+    private String password;
 
 
     public User(String pseudo , String email){
@@ -77,5 +78,13 @@ public class User {
 
     public void setVisible(Boolean isVisible) {
         this.isVisible = isVisible;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public String getPassword(){
+        return this.password;
     }
 }
