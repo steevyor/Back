@@ -23,6 +23,4 @@ public class UserDTO {
         this.pseudo = user.getPseudo();
         this.coord = new CoordinateDTO(user.getCoordinate());
     }
-
-
 }
