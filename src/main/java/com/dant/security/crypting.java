@@ -11,7 +11,7 @@ public class crypting {
     public void setEncrypt(String password){
 
         for (int i=0; i<password.length();i++)  {
-            int c=password.charAt(i)^48;
+            int c=password.charAt(i)^98;
             crypte=crypte+(char)c;
         }
     }
