@@ -23,9 +23,16 @@ public class UserController {
         return dto;
     }
 
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String helloWorld() {
+        return "Hello World";
+    }
+
     @POST
     @Path("/auth")
     public UserDTO authenticate(UserDTO dto ) {
+        System.out.println(""+dto.pseudo +" : " +dto.password );
         //verif
         //crypt
         //Commons lang = > StringUtils => is blank
