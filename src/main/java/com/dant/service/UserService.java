@@ -30,4 +30,13 @@ public class UserService {
         return user;
     }
 
+    public User inscription(UserDTO dto) {
+        User user = dao.get(dto.pseudo);
+        //Si le pseudo existe deja
+        if (user == null) {
+            throw new ForbiddenException();
+        } //else dao.save(user);
+        return user;
+    }
+
 }

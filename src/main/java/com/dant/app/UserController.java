@@ -7,6 +7,8 @@ import com.dant.service.UserService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 @Path("/api/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,8 +25,20 @@ public class UserController {
     @POST
     @Path("/auth")
     public UserDTO authenticate(UserDTO dto ) {
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(dto.password) && org.apache.commons.lang3.StringUtils.isNotBlank(dto.pseudo)) {
+        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
             User user = userService.authenticate(dto);
+            return new UserDTO(user);
+        }
+        //crypt
+        System.out.println("Erreur");
+        return dto;
+    }
+
+    @POST
+    @Path("/inscription")
+    public UserDTO inscription(UserDTO dto ) {
+        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
+            User user = userService.inscription(dto);
             return new UserDTO(user);
         }
         //crypt
