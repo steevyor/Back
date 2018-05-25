@@ -3,12 +3,9 @@ package com.dant.app;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
 import com.dant.service.UserService;
-import com.mysql.cj.util.StringUtils;
-import org.jboss.resteasy.annotations.Form;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.sql.SQLException;
 
 @Path("/api/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,11 +23,12 @@ public class UserController {
     @POST
     @Path("/auth")
     public UserDTO authenticate(UserDTO dto ) {
-        //verif
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(dto.password) && org.apache.commons.lang3.StringUtils.isNotBlank(dto.pseudo)) {
+            User user = userService.authenticate(dto);
+            return new UserDTO(user);
+        }
         //crypt
-        //Commons lang = > StringUtils => is blank
-        User user = userService.authenticate(dto);
-        return new UserDTO(user);
+        System.out.println("Erreur");
+        return dto;
     }
-
 }
