@@ -3,13 +3,10 @@ package com.dant.database;
 import com.dant.entity.Coordinate;
 import com.dant.entity.FriendList;
 import com.dant.entity.User;
-import com.dant.entity.dto.CoordinateDTO;
 import com.dant.exception.InternalServerException;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UserDAO implements DAO<User> {
@@ -117,6 +114,14 @@ public class UserDAO implements DAO<User> {
             st.execute("UPDATE user SET xCoordinates =" +object.xCoordinate +", yCoordinates =" +object.yCoordinate +" FROM user WHERE pseudo =" +key +";");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void authenticate(String l , String p){
+        try(Statement st = connection.createStatement()) {
+
+        }catch (SQLException e){
+
         }
     }
 }

@@ -66,3 +66,15 @@ public class TestEndpoint {
 	}
 */
 }
+
+@Path("/connection")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+class Connection{
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public void connect(@QueryParam("login") String login,
+						@QueryParam("password") String password){
+
+	}
+}
