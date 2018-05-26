@@ -46,8 +46,8 @@ public class UserDAO implements DAO<User> {
                 String a = result.getNString("pseudo");
                 System.out.println(a);
                 String pseudo = result.getString("pseudo");
-                String email = result.getString("email");
-                User user = new User(pseudo,email);
+                String password = result.getString("password");
+                User user = new User(pseudo,password);
                 user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates")));
                 user.setFriendList(new FriendList());
