@@ -125,4 +125,44 @@ public class UserDAO implements DAO<User> {
 
         }
     }
+
+    //modifier la requete quand la relation entres amis sera faite
+    public List<User> getFriends(String key) {
+        List<User> users = new ArrayList<User>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM user where ;");
+            while(result.next()){
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
+                        result.getDouble("yCoordinates"));
+                users.add(new User(pseudo, email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
+
+    //modifier la méthode quand le lien entre amis sera fait en bdd
+    public List<User> getFriendsPosition(String key) {
+        List<User> users = new ArrayList<User>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM user where ;");
+            while(result.next()){
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
+                        result.getDouble("yCoordinates"));
+                users.add(new User(pseudo, email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }

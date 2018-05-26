@@ -10,6 +10,7 @@ public class UserDTO {
     public String password;
     public String pseudo;
     public CoordinateDTO coord;
+    public String token;
 
     public UserDTO() {
     }
@@ -17,17 +18,20 @@ public class UserDTO {
     public UserDTO(String pseudo, String password){
         this.password = password;
         this.pseudo = pseudo;
+        this.token = "test";
     }
     public UserDTO(String pseudo, String email, String password){
         this.password = password;
         this.pseudo = pseudo;
         this.email = email;
+        this.token = "test";
     }
 
     public UserDTO(User user) {
         this.email = user.getEmail();
         this.pseudo = user.getPseudo();
         this.coord = new CoordinateDTO(user.getCoordinate());
+        this.token = "test";
     }
 
     public String getEmail() {

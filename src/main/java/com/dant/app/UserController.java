@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -50,6 +52,43 @@ public class UserController {
             //}
         }
         return dto;
+    }
+
+    @POST
+    @Path("/friendList")
+    public List<UserDTO> sendFriendList(UserDTO dto ) {
+        ArrayList<UserDTO> friends = new ArrayList<UserDTO>();
+
+        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
+
+            friends.add(new UserDTO("test1", dto.email, "test3"));
+            friends.add(new UserDTO("test3", dto.email,  "tes4"));
+            //try {
+            //User user = userService.sendFriendList(dto);
+            //}catch(SQLException e) {
+            //return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
+            //}
+        }
+        return friends;
+    }
+
+
+    @POST
+    @Path("/positions")
+    public List<UserDTO> sendFriendsPositionsList(UserDTO dto ) {
+        ArrayList<UserDTO> friends = new ArrayList<UserDTO>();
+
+        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
+
+            friends.add(new UserDTO("test1", dto.email, "test3"));
+            friends.add(new UserDTO("test3", dto.email,  "tes4"));
+            //try {
+            //User user = userService.sendFriendPositionList(dto);
+            //}catch(SQLException e) {
+            //return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
+            //}
+        }
+        return friends;
     }
 
 }
