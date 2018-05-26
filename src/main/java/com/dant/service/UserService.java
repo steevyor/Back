@@ -14,7 +14,7 @@ public class UserService {
     private final DAO<User> dao = new UserDAO();
 
     public User save(UserDTO dto) {
-        User user = new User(dto.pseudo, dto.email);
+        User user = new User(dto.pseudo, dto.email, dto.password);
         dao.save(user);
         return user;
     }
@@ -43,7 +43,7 @@ public class UserService {
             user = dao.get(dto.pseudo);
             dao.save(user);
         }catch(SQLException e){
-            user = new User(dto.pseudo, dto.email);
+            user = new User(dto.pseudo, dto.email, dto.password);
 
         }
         return user;
