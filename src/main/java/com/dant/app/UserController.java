@@ -7,6 +7,7 @@ import com.dant.service.UserService;
 import com.mysql.cj.util.StringUtils;
 import org.jboss.resteasy.annotations.Form;
 
+import javax.sound.midi.SysexMessage;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -36,17 +37,18 @@ public class UserController {
             //return new UserDTO(user);
         }
         //crypt
-        System.out.println("Erreur");
-        return dto;
+        return new UserDTO(dto.getPseudo(), dto.getEmail());
     }
     @POST
     @Path("/inscription")
     public UserDTO inscription(UserDTO dto ) {
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo) && isNotBlank(dto.email)) {
-            //User user = userService.inscription(dto);
+            //try {
+                //User user = userService.inscription(dto);
+            //}catch(SQLException e) {
+                return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
+            //}
         }
-        //crypt
-        System.out.println("Erreur");
         return dto;
     }
 

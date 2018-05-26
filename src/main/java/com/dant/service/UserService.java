@@ -39,13 +39,12 @@ public class UserService {
 
     public User inscription(UserDTO dto) {
         User user ;
-        try {
-            user = dao.get(dto.pseudo);
-            dao.save(user);
-        }catch(SQLException e){
+        //try {
+            //user = dao.get(dto.pseudo);
+        //}catch(SQLException e){
             user = new User(dto.pseudo, dto.email, dto.password);
-
-        }
+            //dao.save(user);
+        //}
         return user;
     }
 
