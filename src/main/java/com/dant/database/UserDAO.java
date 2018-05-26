@@ -41,12 +41,13 @@ public class UserDAO implements DAO<User> {
         ResultSet result = null;
         try(Statement st = connection.createStatement()){
             result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'"+key+"\';");
-            System.out.println(result.toString());
             if(result.next()){
                 String a = result.getNString("pseudo");
                 System.out.println(a);
                 String pseudo = result.getString("pseudo");
+                System.out.println(pseudo);
                 String password = result.getString("password");
+                System.out.println(password);
                 User user = new User(pseudo,password);
                 user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates")));
