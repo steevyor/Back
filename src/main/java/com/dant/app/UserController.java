@@ -1,15 +1,20 @@
 package com.dant.app;
 
+import com.dant.entity.Token;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
 import com.dant.security.Encripter;
+import com.dant.security.tokenGenerator;
 import com.dant.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mysql.cj.util.StringUtils;
 import org.jboss.resteasy.annotations.Form;
 
 import javax.sound.midi.SysexMessage;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.sql.SQLException;
@@ -22,6 +27,9 @@ import static org.apache.commons.lang3.StringUtils.*;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
+
+    final GsonBuilder builder = new GsonBuilder();
+    final Gson gson = builder.create();
 
     private final UserService userService = new UserService();
 
@@ -41,6 +49,33 @@ public class UserController {
         //crypt
         return new UserDTO(dto.getPseudo(), dto.getEmail());
     }
+
+    @POST
+    @Path("/auth2")
+    public Response authenticate2(UserDTO dto ) {
+        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
+            String json = null;
+            try {
+                if (userService.authenticate2(dto)) {
+                    List list = new ArrayList();
+                    Token token = new Token();
+                    list.add(dto.pseudo);
+                    list.add(token);
+                    json = gson.toJson(list);
+                }
+            } catch (ForbiddenException e) {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+        } else {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
+
+
     @POST
     @Path("/inscription")
     public UserDTO inscription(UserDTO dto ) {

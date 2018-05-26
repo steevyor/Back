@@ -39,6 +39,16 @@ public class UserService {
         return user;
     }
 
+    public boolean authenticate2(UserDTO dto) throws SQLException {
+        User user;
+        user = dao.get(dto.pseudo);
+        if (user.getPassword() == Encripter.encrypt(dto.password)) {
+            return true;
+        } else {
+            throw new ForbiddenException();
+        }
+    }
+
     public User inscription(UserDTO dto) {
         User user ;
         try {
