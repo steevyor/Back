@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mysql.cj.util.StringUtils;
 import org.jboss.resteasy.annotations.Form;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.sound.midi.SysexMessage;
 import javax.ws.rs.*;
@@ -53,6 +54,7 @@ public class UserController {
     @POST
     @Path("/auth2")
     public Response authenticate2(UserDTO dto ) {
+        System.out.println(dto.pseudo +" :" +dto.password);
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
             String json = null;
             try {
@@ -64,13 +66,17 @@ public class UserController {
                     json = gson.toJson(list);
                 }
             } catch (ForbiddenException e) {
+                System.out.println(e);
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             } catch (SQLException f) {
+                System.out.println(f);
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
+            System.out.println(json);
             return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
         } else {
+            System.out.println("NO_CONTENT Exception");
             return Response.status(Response.Status.NO_CONTENT).build();
         }
     }

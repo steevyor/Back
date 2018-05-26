@@ -40,13 +40,18 @@ public class UserDAO implements DAO<User> {
     public User get(String key) throws SQLException {
         ResultSet result = null;
         try(Statement st = connection.createStatement()){
-            result = st.executeQuery("SELECT * FROM user WHERE pseudo =" +key +";");
-            String pseudo = result.getString("pseudo");
-            String email = result.getString("email");
-            User user = new User(pseudo,email);
-            user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
-                    result.getDouble("yCoordinates")));
-            user.setFriendList(new FriendList());
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'"+key+"\';");
+            System.out.println(result.toString());
+            if(result.next()){
+                String a = result.getNString("pseudo");
+                System.out.println(a);
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                User user = new User(pseudo,email);
+                user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
+                        result.getDouble("yCoordinates")));
+                user.setFriendList(new FriendList());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException();
