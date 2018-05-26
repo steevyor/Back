@@ -42,7 +42,8 @@ public class UserService {
     public boolean authenticate2(UserDTO dto) throws SQLException {
         User user;
         user = dao.get(dto.pseudo);
-        if (user.getPassword() == Encripter.encrypt(dto.password)) {
+        System.out.println(user.getPseudo());
+        if (user.getPassword() == /*Encripter.encrypt*/(dto.password)) {
             return true;
         } else {
             throw new ForbiddenException();

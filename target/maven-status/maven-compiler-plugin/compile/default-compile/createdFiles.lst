@@ -1,13 +1,3 @@
-com\dant\security\tokenGenerator.class
-com\dant\entity\Invitation.class
 com\dant\security\Encripter.class
-com\dant\database\InvitationRequestTableDAO.class
-com\dant\entity\dto\InvitationDTO.class
-com\dant\filter\jsonSerial.class
 com\dant\entity\Token.class
-com\dant\database\InvitationDemandTableDAO.class
-com\dant\database\InvitationDAO.class
-com\dant\entity\InvitationRequestTable.class
-com\dant\entity\InvitationDemandTable.class
-com\dant\app\Connection.class
 com\dant\security\decrypting.class
