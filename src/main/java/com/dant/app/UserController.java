@@ -95,7 +95,7 @@ public class UserController {
 
     @POST
     @Path("/inscription")
-    public UserDTO inscription(UserDTO dto ) {
+    public Response inscription(UserDTO dto ) {
         System.out.println("UserControler.inscription : ");
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo) && isNotBlank(dto.email)) {
             System.out.printf("UserControler.inscription field not blank: pseudo = %s, password = %s, email = %s",
@@ -105,24 +105,29 @@ public class UserController {
                 System.out.printf("UserControler.inscription : registering new user now");
                 if(userService.inscription(dto)){
                     System.out.printf("UserControler.inscription : new user successfuly registered");
+                    List list = new ArrayList();
+                    System.out.println("UserControler.inscription : creating token now ");
+                    Token token = new Token();
+                    System.out.println("UserControler.inscription : token successfully created");
+                    list.add(dto.pseudo);
+                    list.add(token);
+                    System.out.println("UserControler.inscription : adding Data to json");
+                    json = gson.toJson(list);
+                    System.out.println("UserControler.inscription : json successfully created");
                 }
-
             }catch (InternalServerException e){
-
+                System.out.println(e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
             }catch (ForbiddenException f){
-
+                System.out.println(f);
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
-
-
-            UserDAO dao = new UserDAO();
-            System.out.printf("UserControler.inscription : testing if user already exists. exists = %b", dao.doesExist(dto.pseudo));
-            //try {
-                //User user = userService.inscription(dto);
-            //}catch(SQLException e) {
-                return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
-            //}
+            System.out.println("UserControler.inscription : now returning response to inscription request ");
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return dto;
     }
 
     @POST
