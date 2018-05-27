@@ -21,15 +21,14 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public void save(User object) {
-
+        System.out.println();
         try(Statement st = connection.createStatement()){
-            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
+            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email, password) VALUES(?, ?, ?);");
             preparedStatement.setString(1, object.getPseudo());
             preparedStatement.setString(2, object.getEmail());
+            preparedStatement.setString(3, object.getPassword());
             preparedStatement.executeUpdate();
-            st.execute("INSERT INTO user(pseudo, email) VALUES(" +object.getPseudo() +"," +object.getEmail() +");");
-            //st = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
-
+            //st.execute("INSERT INTO user(pseudo, email, password) VALUES(" +object.getPseudo() +"," +object.getEmail() +"," +object.getPassword() +");");
         } catch (SQLException e) {
             throw new InternalServerException(e);
         }

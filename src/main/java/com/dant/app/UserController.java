@@ -4,6 +4,7 @@ import com.dant.database.UserDAO;
 import com.dant.entity.Token;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
+import com.dant.exception.InternalServerException;
 import com.dant.security.Encripter;
 import com.dant.security.tokenGenerator;
 import com.dant.service.UserService;
@@ -99,6 +100,18 @@ public class UserController {
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo) && isNotBlank(dto.email)) {
             System.out.printf("UserControler.inscription field not blank: pseudo = %s, password = %s, email = %s",
                     dto.pseudo, dto.password, dto.email);
+            String json = null;
+            try{
+                System.out.printf("UserControler.inscription : registering new user now");
+                if(userService.inscription(dto)){
+                    System.out.printf("UserControler.inscription : new user successfuly registered");
+                }
+
+            }catch (InternalServerException e){
+
+            }catch (ForbiddenException f){
+
+            }
 
 
             UserDAO dao = new UserDAO();

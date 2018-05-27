@@ -4,6 +4,7 @@ import com.dant.database.DAO;
 import com.dant.database.UserDAO;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
+import com.dant.exception.InternalServerException;
 import com.dant.security.Encripter;
 
 import javax.ws.rs.ForbiddenException;
@@ -52,17 +53,17 @@ public class UserService {
         }
     }
 
-    public User inscription(UserDTO dto) {
-        User user ;
-        try {
-        user = dao.get(dto.pseudo);
-        return new User();
-        }catch(SQLException e){
-
-        return this.save(dto);
+    public boolean inscription(UserDTO dto) throws InternalServerException {
+        System.out.printf("UserService.inscription : verifying user inexistance");
+        if (dao.doesExist(dto.pseudo)) {
+            System.out.printf("UserService.inscription : user pseudo already exists");
+            throw new ForbiddenException();
+        } else {
+            dao.save(new User(dto.pseudo, dto.email, dto.password));
+            return true;
         }
-
     }
+
 
     public List<User> sendFriendList(UserDTO dto) {
         ArrayList<User> friends = new ArrayList<User>();
