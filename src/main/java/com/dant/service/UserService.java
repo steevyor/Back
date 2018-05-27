@@ -42,7 +42,9 @@ public class UserService {
     public boolean authenticate2(UserDTO dto) throws SQLException {
         User user;
         user = dao.get(dto.pseudo);
-        System.out.println(user.getPseudo());
+        System.out.println("UserService.authenticate2 : UserPseudo =" +user.getPseudo());
+        System.out.println("UserService.authenticate2 : UserPassword =" +user.getPassword());
+        System.out.println("UserService.authenticate2 : UserDTOPassword =" +dto.password);
         if (user.getPassword() == /*Encripter.encrypt*/(dto.password)) {
             return true;
         } else {
