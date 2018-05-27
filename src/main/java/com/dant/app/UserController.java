@@ -1,5 +1,6 @@
 package com.dant.app;
 
+import com.dant.database.UserDAO;
 import com.dant.entity.Token;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
@@ -62,13 +63,17 @@ public class UserController {
             try {
                 System.out.println("UserControler.authenticate2 : authenticating now");
                 if (userService.authenticate2(dto)) {
-                    System.out.println("UserControler.authenticate2 : user correctly authenticated");
+                    System.out.println("UserControler.authenticate2 : user correctly authenticated !");
                     List list = new ArrayList();
                     System.out.println("UserControler.authenticate2 : creating token now ");
                     Token token = new Token();
+                    System.out.println("UserControler.authenticate2 : token successfully created !");
                     list.add(dto.pseudo);
                     list.add(token);
+                    System.out.println("UserControler.authenticate2 : adding data to json ");
                     json = gson.toJson(list);
+                    System.out.println("UserControler.authenticate2 : json successfully created ! ");
+                    System.out.println(json);
                 }
             } catch (ForbiddenException e) {
                 System.out.println(e);
@@ -77,7 +82,7 @@ public class UserController {
                 System.out.println(f);
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            System.out.println(json);
+            System.out.println("UserControler.authenticate2 : now returning response to auth2 request ");
             return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
         } else {
@@ -90,7 +95,14 @@ public class UserController {
     @POST
     @Path("/inscription")
     public UserDTO inscription(UserDTO dto ) {
+        System.out.println("UserControler.inscription : ");
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo) && isNotBlank(dto.email)) {
+            System.out.printf("UserControler.inscription field not blank: pseudo = %s, password = %s, email = %s",
+                    dto.pseudo, dto.password, dto.email);
+
+
+            UserDAO dao = new UserDAO();
+            System.out.printf("UserControler.inscription : testing if user already exists. exists = %b", dao.doesExist(dto.pseudo));
             //try {
                 //User user = userService.inscription(dto);
             //}catch(SQLException e) {

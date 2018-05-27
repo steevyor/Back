@@ -60,6 +60,21 @@ public class UserDAO implements DAO<User> {
         return new User();
     }
 
+    public boolean doesExist(String key) {
+        ResultSet result = null;
+        try (Statement st = connection.createStatement()) {
+            System.out.println("UserDAO.doesExist : executing get query now");
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'" + key + "\';");
+            System.out.println("UserDAO.doesExist : query executed");
+            if (result.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public void delete(User object) {
 
