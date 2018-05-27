@@ -1,20 +1,12 @@
 package com.dant.app;
 
-import com.dant.database.UserDAO;
 import com.dant.entity.Token;
-import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
-import com.dant.security.Encripter;
-import com.dant.security.tokenGenerator;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mysql.cj.util.StringUtils;
-import org.jboss.resteasy.annotations.Form;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
-import javax.sound.midi.SysexMessage;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,8 +15,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.*;
 
 @Path("/api/user")
 @Produces(MediaType.APPLICATION_JSON)
