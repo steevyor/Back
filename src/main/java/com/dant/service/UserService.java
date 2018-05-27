@@ -60,7 +60,13 @@ public class UserService {
             System.out.printf("UserService.inscription : user pseudo already exists");
             throw new ForbiddenException();
         } else {
-            dao.save(new User(dto.pseudo, dto.email,Encripter.encrypt( dto.password) ));
+            System.out.println("UserService.inscription : user does not exist");
+            System.out.println("UserService.inscription : starting encryption : ");
+            String encryptedPassword = Encripter.encrypt(dto.password);
+            System.out.println("UserService.inscription : userDTO password = "+dto.password
+                    +" ; encrypted password = "+encryptedPassword);
+            dao.save(new User(dto.pseudo, dto.email, encryptedPassword));
+            System.out.println("UserService.inscription : user saved");
             return true;
         }
     }
