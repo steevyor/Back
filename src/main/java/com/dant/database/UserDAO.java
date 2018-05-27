@@ -45,11 +45,11 @@ public class UserDAO implements DAO<User> {
                 String pseudo = result.getString("pseudo");
                 String email = result.getString("email");
                 String password = result.getString("password");
-                User user = new User(pseudo,password);
+                User user = new User(pseudo,email,password);
                 System.out.println(user.getPassword());
                 user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"), result.getDouble("yCoordinates")));
                 user.setFriendList(new FriendList());
-                return new User(pseudo, email, password);
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
