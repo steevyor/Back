@@ -1,11 +1,15 @@
 package com.dant.entity;
 
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Token {
 
     private static SecureRandom random = new SecureRandom();
-    private long timer;
+    String currentTime;
     private String key;
 
 
@@ -24,11 +28,13 @@ public class Token {
     }
 
     private void setTimer(){
-        this.timer = System.currentTimeMillis() % 1000;
+        LocalDateTime now = LocalDateTime.now();
+        this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
     }
 
     public void updateTimer(){
-        this.timer = System.currentTimeMillis() % 1000;
+        LocalDateTime now = LocalDateTime.now();
+        this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
     }
 
 }
