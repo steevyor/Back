@@ -187,9 +187,9 @@ public class UserDAO implements DAO<User> {
 
     public String getToken(String key) {
         try (Statement st = connection.createStatement()) {
-            ResultSet result = st.executeQuery("SELECT token FROM user WHERE pseudo = '" +key + "' ;");
-            if( result.next()){
-                return result.getString("token");
+            ResultSet result = st.executeQuery("SELECT tokenKey FROM token WHERE userPseudo = '" +key + "' ;");
+            if(result.next()){
+                return result.getString("tokenKey");
             } else return null;
         } catch (SQLException e) {
             e.printStackTrace();
