@@ -22,31 +22,13 @@ public class UserService {
         return user;
     }
 
-    public User authenticate(UserDTO dto) {
-        User user;
-        try {
-            user = dao.get(dto.pseudo);
-            if (user.getPassword() == Encripter.encrypt(dto.password)) {
-
-            }
-            // SI user.getPassword().equals(dto.password)
-            if (false) {
-                throw new ForbiddenException();
-            }
-        }
-        catch(SQLException e){
-            throw new ForbiddenException();
-        }
-        return user;
-    }
-
-    public boolean authenticate2(UserDTO dto) throws SQLException {
+    public boolean authenticate(UserDTO dto) throws SQLException {
         User user;
         user = dao.get(dto.pseudo);
-        System.out.println("UserService.authenticate2 : UserPseudo =" +user.getPseudo());
-        System.out.println("UserService.authenticate2 : UserPassword =" +user.getPassword());
-        System.out.println("UserService.authenticate2 : UserDTOPassword =" +dto.password);
-        System.out.println("UserService.authenticate2 : UserDTOPassword Encrypted =" +Encripter.encrypt(dto.password));
+        System.out.println("UserService.authenticate : UserPseudo =" +user.getPseudo());
+        System.out.println("UserService.authenticate : UserPassword =" +user.getPassword());
+        System.out.println("UserService.authenticate : UserDTOPassword =" +dto.password);
+        System.out.println("UserService.authenticate : UserDTOPassword Encrypted =" +Encripter.encrypt(dto.password));
         if (user.getPassword().equals(Encripter.encrypt(dto.password))) {
             return true;
         } else {
