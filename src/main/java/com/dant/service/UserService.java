@@ -45,7 +45,7 @@ public class UserService {
         System.out.println("UserService.authenticate2 : UserPseudo =" +user.getPseudo());
         System.out.println("UserService.authenticate2 : UserPassword =" +user.getPassword());
         System.out.println("UserService.authenticate2 : UserDTOPassword =" +dto.password);
-        if (user.getPassword() == /*Encripter.encrypt*/(dto.password)) {
+        if (user.getPassword().equals(/*Encripter.encrypt*/(dto.password))) {
             return true;
         } else {
             throw new ForbiddenException();
