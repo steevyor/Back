@@ -3,7 +3,7 @@ package com.dant.entity;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class Token {
@@ -35,7 +35,7 @@ public class Token {
         System.out.println("    Token : setting timer now");
         LocalDateTime now = LocalDateTime.now();
         System.out.println("    Token : LocalDateTime initialised");
-        this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
+        this.currentTime= now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss",Locale.ENGLISH));
         System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
