@@ -36,8 +36,24 @@ public class User {
     }
 
 
-    public User() {
+    public User(String pseudo) {
+        this.pseudo = pseudo;
+        this.email = "";
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        //a encrypter
+        this.password = "";
+    }
 
+    public User() {
+        this.pseudo = "";
+        this.email = "";
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        //a encrypter
+        this.password = "";
     }
 
     public String getPseudo() {

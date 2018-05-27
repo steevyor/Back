@@ -112,6 +112,7 @@ public class UserDAO implements DAO<User> {
     public Coordinate getCoordinates(String key){
         try (Statement st = connection.createStatement()) {
             ResultSet result = st.executeQuery("SELECT xCoordinates, yCoordinates FROM user WHERE pseudo =" +key +";");
+            result.next();
             double x = result.getDouble("xCoordinates");
             double y = result.getDouble("yCoordinates");
             return new Coordinate(x,y);
@@ -146,20 +147,18 @@ public class UserDAO implements DAO<User> {
     }
 
     //modifier la requete quand la relation entres amis sera faite
-    public List<User> getFriends(String key) {
-        List<User> users = new ArrayList<User>();
+    public List<String> getFriends(String key) throws SQLException {
+        List<String> users = new ArrayList<String>();
         ResultSet result = null;
         try(Statement st = connection.createStatement()) {
-            result = st.executeQuery("SELECT * FROM user where ;");
+            result = st.executeQuery("SELECT friendPseudo FROM friendship where userPseudo = '" + key + "' ;");
             while(result.next()){
-                String pseudo = result.getString("pseudo");
-                String email = result.getString("email");
-                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
-                        result.getDouble("yCoordinates"));
-                users.add(new User(pseudo, email));
+                String pseudo = result.getString("friendPseudo");
+                users.add(pseudo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException();
         }
 
         return users;
@@ -184,4 +183,20 @@ public class UserDAO implements DAO<User> {
 
         return users;
     }
+
+
+    public String getToken(String key) {
+        try (Statement st = connection.createStatement()) {
+            ResultSet result = st.executeQuery("SELECT token FROM user WHERE pseudo = '" +key + "' ;");
+            if( result.next()){
+                return result.getString("token");
+            } else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 }

@@ -127,20 +127,32 @@ public class UserController {
 
     @POST
     @Path("/friendList")
-    public List<UserDTO> sendFriendList(UserDTO dto ) {
-        ArrayList<UserDTO> friends = new ArrayList<UserDTO>();
+    public Response sendFriendList(UserDTO dto ) {
+        System.out.println("UserControler.sendFriendlist :");
+        System.out.println(dto.pseudo +" :" +dto.token);
+        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+            System.out.println("UserControler.sendFriendlist : fields are not blank");
+            String json = null;
+            try {
+                System.out.println("UserControler.sendFriendlist : sending now");
+                System.out.println("UserControler.sendFriendlist : adding data to json ");
+                json = gson.toJson(userService.sendFriendList(dto));
+                System.out.println("UserControler.sendFriendlist : json successfully created ! ");
+                System.out.println(json);
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            System.out.println("UserControler.sendFriendlist : now returning response to friendList request ");
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
-
-            friends.add(new UserDTO("test1", dto.email, "test3"));
-            friends.add(new UserDTO("test3", dto.email,  "tes4"));
-            //try {
-            //User user = userService.sendFriendList(dto);
-            //}catch(SQLException e) {
-            //return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
-            //}
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return friends;
     }
 
 

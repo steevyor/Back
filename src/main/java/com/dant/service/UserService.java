@@ -65,23 +65,16 @@ public class UserService {
     }
 
 
-    public List<User> sendFriendList(UserDTO dto) {
-        ArrayList<User> friends = new ArrayList<User>();
-        //try {
-        for(User u : this.dao.getFriends(dto.pseudo)){
-            friends.add(u);
-        }
-
-        //}catch(SQLException e){
-        return friends;
-        //}
-        //return friends;
+    public List<String> sendFriendList(UserDTO dto) throws SQLException {
+        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
+            return this.dao.getFriends(dto.pseudo);
+        } else throw new ForbiddenException();
     }
 
     public List<User> sendFriendsPositionList(UserDTO dto) {
         ArrayList<User> friends = new ArrayList<User>();
         //try {
-        for(User u : this.dao.getFriends(dto.pseudo)){
+        for(User u : this.dao.getFriendsPosition(dto.pseudo)){
             friends.add(u);
         }
         //
