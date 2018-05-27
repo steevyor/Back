@@ -42,22 +42,19 @@ public class UserDAO implements DAO<User> {
         try(Statement st = connection.createStatement()){
             result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'"+key+"\';");
             if(result.next()){
-                String a = result.getNString("pseudo");
-                System.out.println(a);
                 String pseudo = result.getString("pseudo");
-                System.out.println(pseudo);
+                String email = result.getString("email");
                 String password = result.getString("password");
-                System.out.println(password);
                 User user = new User(pseudo,password);
-                user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
-                        result.getDouble("yCoordinates")));
+                System.out.println(user.getPassword());
+                user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"), result.getDouble("yCoordinates")));
                 user.setFriendList(new FriendList());
+                return new User(pseudo, email, password);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException();
         }
-        User user= new User();
         return new User();
     }
 
