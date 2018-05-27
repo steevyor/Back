@@ -54,12 +54,17 @@ public class UserController {
     @POST
     @Path("/auth2")
     public Response authenticate2(UserDTO dto ) {
+        System.out.println("UserControler.authenticate2 :");
         System.out.println(dto.pseudo +" :" +dto.password);
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
+            System.out.println("UserControler.authenticate2 : fields are not blank");
             String json = null;
             try {
+                System.out.println("UserControler.authenticate2 : authenticating now");
                 if (userService.authenticate2(dto)) {
+                    System.out.println("UserControler.authenticate2 : user correctly authenticated");
                     List list = new ArrayList();
+                    System.out.println("UserControler.authenticate2 : creating token now ");
                     Token token = new Token();
                     list.add(dto.pseudo);
                     list.add(token);

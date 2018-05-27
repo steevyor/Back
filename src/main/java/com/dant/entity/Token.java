@@ -14,8 +14,10 @@ public class Token {
 
 
     public Token(){
+        System.out.println("Token : creating instance now");
         generateTokenKey();
         setTimer();
+        System.out.println("Token : token instance successfully created");
     }
 
     public Token(String key){
@@ -24,12 +26,17 @@ public class Token {
     }
 
     private void generateTokenKey(){
+        System.out.println("    Token : generating token key now");
         this.key = Long.toString( Math.abs( random.nextLong() ), 64);
+        System.out.println("    Token : token key generated : "+this.key);
     }
 
     private void setTimer(){
+        System.out.println("    Token : setting timer now");
         LocalDateTime now = LocalDateTime.now();
+        System.out.println("    Token : LocalDateTime initialised");
         this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
+        System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
     public void updateTimer(){
