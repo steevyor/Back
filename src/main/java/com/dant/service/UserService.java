@@ -46,7 +46,7 @@ public class UserService {
         System.out.println("UserService.authenticate2 : UserPseudo =" +user.getPseudo());
         System.out.println("UserService.authenticate2 : UserPassword =" +user.getPassword());
         System.out.println("UserService.authenticate2 : UserDTOPassword =" +dto.password);
-        if (user.getPassword().equals(/*Encripter.encrypt*/(dto.password))) {
+        if (user.getPassword().equals(Encripter.encrypt(dto.password))) {
             return true;
         } else {
             throw new ForbiddenException();
@@ -59,7 +59,7 @@ public class UserService {
             System.out.printf("UserService.inscription : user pseudo already exists");
             throw new ForbiddenException();
         } else {
-            dao.save(new User(dto.pseudo, dto.email, dto.password));
+            dao.save(new User(dto.pseudo, dto.email,Encripter.encrypt( dto.password) ));
             return true;
         }
     }
