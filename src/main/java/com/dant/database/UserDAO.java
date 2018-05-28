@@ -197,6 +197,17 @@ public class UserDAO implements DAO<User> {
         }
     }
 
+    public void saveInvitation(String user, String invited) {
+        try (Statement st = connection.createStatement()) {
+            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?, ?);");
+            preparedStatement.setString(1, user);
+            preparedStatement.setString(2, invited);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

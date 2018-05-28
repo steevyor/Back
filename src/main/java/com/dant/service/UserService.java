@@ -66,5 +66,11 @@ public class UserService {
         } else throw new ForbiddenException();
     }
 
+    public void sendInvitation(UserDTO dto, UserDTO invited) throws SQLException {
+        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
+            this.dao.saveInvitation(dto.pseudo, invited.pseudo);
+        } else throw new ForbiddenException();
+    }
+
 
 }
