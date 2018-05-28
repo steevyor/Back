@@ -24,6 +24,7 @@ public class User {
         this.password = password;
     }
 
+
     public User(String pseudo , String email){
 
         this.pseudo = pseudo;
@@ -42,6 +43,17 @@ public class User {
         this.friendList = new FriendList();
         this.isConnected = false;
         this.isVisible  = false;
+        //a encrypter
+        this.password = "";
+    }
+
+    public User(String pseudo, Coordinate c) {
+        this.pseudo = pseudo;
+        this.email = "";
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        this.coordinate = c;
         //a encrypter
         this.password = "";
     }
