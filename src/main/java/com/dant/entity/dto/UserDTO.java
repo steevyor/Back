@@ -13,6 +13,11 @@ public class UserDTO {
     public UserDTO() {
     }
 
+    public UserDTO(String pseudo, String password){
+        this.password = password;
+        this.pseudo = pseudo;
+    }
+
     public UserDTO(User user) {
         this.email = user.getEmail();
         this.pseudo = user.getPseudo();

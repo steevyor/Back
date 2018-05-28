@@ -4,6 +4,7 @@ import com.dant.database.DAO;
 import com.dant.database.UserDAO;
 import com.dant.entity.User;
 import com.dant.entity.dto.UserDTO;
+import com.dant.security.Encripter;
 
 import javax.ws.rs.ForbiddenException;
 import java.sql.SQLException;
@@ -22,6 +23,9 @@ public class UserService {
         User user = dao.get(dto.pseudo);
         if (user == null) {
             throw new ForbiddenException();
+        }
+        if(user.getPassword() == Encripter.encrypt(dto.password)){
+
         }
         // SI user.getPassword().equals(dto.password)
         if (false) {
