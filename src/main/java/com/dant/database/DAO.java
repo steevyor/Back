@@ -7,7 +7,7 @@ public interface DAO<T> {
 
     void save(T object);
 
-    T get(String key);
+    T get(String key) throws SQLException;
 
     void delete(T object);
 

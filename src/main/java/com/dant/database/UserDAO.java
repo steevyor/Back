@@ -21,15 +21,14 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public void save(User object) {
-
+        System.out.println();
         try(Statement st = connection.createStatement()){
-            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
+            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email, password) VALUES(?, ?, ?);");
             preparedStatement.setString(1, object.getPseudo());
             preparedStatement.setString(2, object.getEmail());
+            preparedStatement.setString(3, object.getPassword());
             preparedStatement.executeUpdate();
-            st.execute("INSERT INTO user(pseudo, email) VALUES(" +object.getPseudo() +"," +object.getEmail() +");");
-            //st = connection.prepareStatement("INSERT INTO user(pseudo, email) VALUES(?, ?);");
-
+            //st.execute("INSERT INTO user(pseudo, email, password) VALUES(" +object.getPseudo() +"," +object.getEmail() +"," +object.getPassword() +");");
         } catch (SQLException e) {
             throw new InternalServerException(e);
         }
@@ -37,21 +36,42 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public User get(String key){
+    public User get(String key) throws SQLException {
         ResultSet result = null;
         try(Statement st = connection.createStatement()){
-            result = st.executeQuery("SELECT * FROM user WHERE pseudo =" +key +";");
-            String pseudo = result.getString("pseudo");
-            String email = result.getString("email");
-            User user = new User(pseudo,email);
-            user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"),
-                    result.getDouble("yCoordinates")));
-            user.setFriendList(new FriendList());
+            System.out.println("UserDAO.get : executing get query now");
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'"+key+"\';");
+            System.out.println("UserDAO.get : query executed");
+            if(result.next()){
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                String password = result.getString("password");
+                User user = new User(pseudo,email,password);
+                user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"), result.getDouble("yCoordinates")));
+                user.setFriendList(new FriendList());
+                System.out.println("UserDAO.get : query result User = "+user.getPseudo() +";" +user.getEmail() +";" +user.getPassword() );
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
+        return new User();
+    }
+
+    public boolean doesExist(String key) {
+        ResultSet result = null;
+        try (Statement st = connection.createStatement()) {
+            System.out.println("UserDAO.doesExist : executing get query now");
+            result = st.executeQuery("SELECT * FROM user WHERE pseudo =\'" + key + "\';");
+            System.out.println("UserDAO.doesExist : query executed");
+            if (result.next()) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        User user= new User();
-        return new User();
+        return false;
     }
 
     @Override
@@ -92,6 +112,7 @@ public class UserDAO implements DAO<User> {
     public Coordinate getCoordinates(String key){
         try (Statement st = connection.createStatement()) {
             ResultSet result = st.executeQuery("SELECT xCoordinates, yCoordinates FROM user WHERE pseudo =" +key +";");
+            result.next();
             double x = result.getDouble("xCoordinates");
             double y = result.getDouble("yCoordinates");
             return new Coordinate(x,y);
@@ -124,4 +145,58 @@ public class UserDAO implements DAO<User> {
 
         }
     }
+
+    //modifier la requete quand la relation entres amis sera faite
+    public List<String> getFriends(String key) throws SQLException {
+        List<String> users = new ArrayList<String>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT friendPseudo FROM friendship where userPseudo = '" + key + "' ;");
+            while(result.next()){
+                String pseudo = result.getString("friendPseudo");
+                users.add(pseudo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
+
+        return users;
+    }
+
+    //modifier la méthode quand le lien entre amis sera fait en bdd
+    public List<User> getFriendsPosition(String key) {
+        List<User> users = new ArrayList<User>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM user where ;");
+            while(result.next()){
+                String pseudo = result.getString("pseudo");
+                String email = result.getString("email");
+                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
+                        result.getDouble("yCoordinates"));
+                users.add(new User(pseudo, email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
+
+
+    public String getToken(String key) {
+        try (Statement st = connection.createStatement()) {
+            ResultSet result = st.executeQuery("SELECT tokenKey FROM token WHERE userPseudo = '" +key + "' ;");
+            if(result.next()){
+                return result.getString("tokenKey");
+            } else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 }

@@ -13,6 +13,17 @@ public class User {
     private String password;
 
 
+    public User(String pseudo , String email, String password){
+
+        this.pseudo = pseudo;
+        this.email = email;
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        //a encrypter
+        this.password = password;
+    }
+
     public User(String pseudo , String email){
 
         this.pseudo = pseudo;
@@ -20,10 +31,29 @@ public class User {
         this.friendList = new FriendList();
         this.isConnected = false;
         this.isVisible  = false;
+        //a encrypter
+        this.password = null;
+    }
+
+
+    public User(String pseudo) {
+        this.pseudo = pseudo;
+        this.email = "";
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        //a encrypter
+        this.password = "";
     }
 
     public User() {
-
+        this.pseudo = "";
+        this.email = "";
+        this.friendList = new FriendList();
+        this.isConnected = false;
+        this.isVisible  = false;
+        //a encrypter
+        this.password = "";
     }
 
     public String getPseudo() {
