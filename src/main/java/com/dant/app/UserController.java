@@ -141,21 +141,63 @@ public class UserController {
 
 
     @POST
-    @Path("/positions")
-    public List<UserDTO> sendFriendsPositionsList(UserDTO dto ) {
-        ArrayList<UserDTO> friends = new ArrayList<UserDTO>();
+    @Path("/friendPositions")
+    public Response sendFriendsPositionsList(UserDTO dto ) {
+        System.out.println("UserControler.sendFriendsPositions :");
+        System.out.println(dto.pseudo +" :" +dto.token);
+        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+            System.out.println("UserControler.sendFriendsPositions : fields are not blank");
+            String json = null;
+            try {
+                System.out.println("UserControler.sendFriendsPositions : sending now");
+                System.out.println("UserControler.sendFriendsPositions : adding data to json ");
+                json = gson.toJson(userService.sendFriendsPositionList(dto));
+                System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
+                System.out.println(json);
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            System.out.println("UserControler.sendFriendsPositions : now returning response to friendList request ");
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-        if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
-
-            friends.add(new UserDTO("test1", dto.email, "test3"));
-            friends.add(new UserDTO("test3", dto.email,  "tes4"));
-            //try {
-            //User user = userService.sendFriendPositionList(dto);
-            //}catch(SQLException e) {
-            //return new UserDTO(dto.getPseudo(), dto.getEmail(), dto.getPassword());
-            //}
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return friends;
+    }
+
+
+    @POST
+    @Path("/sendInvitation")
+    public Response sendInvitati(UserDTO dto, UserDTO invited) {
+        System.out.println("UserControler.sendInvitation :");
+        System.out.println(dto.pseudo +" :" +dto.token);
+        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+            System.out.println("UserControler.sendInvitation : fields are not blank");
+            String json = null;
+            try {
+                System.out.println("UserControler.sendInvitation : updating ");
+                userService.sendInvitation(dto, invited);
+                System.out.println("UserControler.sendInvitation : update successfully done ! ");
+                System.out.println(json);
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            //System.out.println("UserControler.sendInvitation : now returning response to sendInvitation request ");
+            return Response.status(Response.Status.ACCEPTED).build();
+
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
     }
 
 }

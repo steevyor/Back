@@ -5,7 +5,8 @@ public class Coordinate {
     public double yCoordinate;
 
     public Coordinate(){
-
+        this.xCoordinate = 0;
+        this.yCoordinate = 0;
     }
 
     public Coordinate(double x, double y){

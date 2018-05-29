@@ -60,17 +60,16 @@ public class UserService {
         } else throw new ForbiddenException();
     }
 
-    public List<User> sendFriendsPositionList(UserDTO dto) {
-        ArrayList<User> friends = new ArrayList<User>();
-        //try {
-        for(User u : this.dao.getFriendsPosition(dto.pseudo)){
-            friends.add(u);
-        }
-        //
-        //}catch(SQLException e){
-        //dao.save(user);
-        //}
-        return friends;
+    public List<User> sendFriendsPositionList(UserDTO dto) throws SQLException {
+        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
+            return this.dao.getFriendsPosition(dto.pseudo);
+        } else throw new ForbiddenException();
+    }
+
+    public void sendInvitation(UserDTO dto, UserDTO invited) throws SQLException {
+        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
+            this.dao.saveInvitation(dto.pseudo, invited.pseudo);
+        } else throw new ForbiddenException();
     }
 
 

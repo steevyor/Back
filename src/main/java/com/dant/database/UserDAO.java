@@ -165,20 +165,20 @@ public class UserDAO implements DAO<User> {
     }
 
     //modifier la méthode quand le lien entre amis sera fait en bdd
-    public List<User> getFriendsPosition(String key) {
+    public List<User> getFriendsPosition(String key) throws SQLException {
         List<User> users = new ArrayList<User>();
         ResultSet result = null;
         try(Statement st = connection.createStatement()) {
-            result = st.executeQuery("SELECT * FROM user where ;");
+            result = st.executeQuery("select u.xCoordinates, u.yCoordinates, friendPseudo from user u, friendship f where f.userPseudo = '" + key + "' and u.pseudo = f.friendPseudo;");
             while(result.next()){
-                String pseudo = result.getString("pseudo");
-                String email = result.getString("email");
-                Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
-                        result.getDouble("yCoordinates"));
-                users.add(new User(pseudo, email));
+                Double x = result.getDouble("xCoordinates");
+                Double y = result.getDouble("yCoordinates");
+                String pseudo = result.getString("friendPseudo");
+                users.add(new User(pseudo, new Coordinate(x, y)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException();
         }
 
         return users;
@@ -194,6 +194,17 @@ public class UserDAO implements DAO<User> {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void saveInvitation(String user, String invited) {
+        try (Statement st = connection.createStatement()) {
+            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?, ?);");
+            preparedStatement.setString(1, user);
+            preparedStatement.setString(2, invited);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
