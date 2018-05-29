@@ -1,6 +1,7 @@
 package com.dant.app;
 
 import com.dant.entity.Token;
+import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.service.UserService;
@@ -26,13 +27,13 @@ public class UserController {
 
     private final UserService userService = new UserService();
 
-//    @POST
-//    @Path("/tests")
-//    public Response create(UserDTO dto, Token token) {
-//        Token t = token;
-//        userService.save(dto);
-//        return dto;
-//    }
+    @POST
+    @Path("/tests")
+    public Response create(UserDTO udto, TokenDTO tdto) {
+        Token t = new Token(tdto.getKey());
+        userService.save(udto);
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
 
     @POST
     @Path("/auth")

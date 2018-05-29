@@ -57,4 +57,9 @@ public class Token {
     public String getTimer() {
         return this.currentTime;
     }
+
+    public boolean isTimerGapValid(String timer){
+
+        return true;
+    }
 }

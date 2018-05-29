@@ -38,7 +38,7 @@ public class TokenDAO implements DAO<Token>{
         String key = null;
         String timer = null;
         try (Statement st = connection.createStatement()) {
-            result = st.executeQuery("SELECT * FROM token WHERE pseudo =\'" + key + "\';");
+            result = st.executeQuery("SELECT * FROM token WHERE pseudo =\'" + pseudo + "\';");
             if (result.next()) {
                 pseudo = result.getString("userPseudp");
                 key = result.getString("tokenKey");
@@ -51,6 +51,27 @@ public class TokenDAO implements DAO<Token>{
             throw new SQLException();
         }
         return new Token(key, timer);
+    }
+
+    public Token getByKey(String key) throws SQLException {
+        ResultSet result = null;
+        String timer = null;
+        String pseudo = null;
+        try (Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM token WHERE key =\'" + key + "\';");
+            if (result.next()) {
+                //pseudo = result.getString("userPseudp");
+                key = result.getString("tokenKey");
+                timer = result.getString("timer");
+                return new Token(key, timer);
+            }
+            else{
+                throw new NullPointerException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
     }
 
     @Override
