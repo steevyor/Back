@@ -2,6 +2,7 @@ package com.dant.database;
 
 import com.dant.entity.Coordinate;
 import com.dant.entity.FriendList;
+import com.dant.entity.Invitation;
 import com.dant.entity.User;
 import com.dant.exception.InternalServerException;
 
@@ -197,12 +198,21 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public void saveInvitation(String user, String invited) {
+    public void saveInvitation(Invitation inv) {
         try (Statement st = connection.createStatement()) {
-            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?, ?);");
-            preparedStatement.setString(1, user);
-            preparedStatement.setString(2, invited);
+            //Relation dans un sens
+            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
+            preparedStatement.setString(1, inv.getEmitterId());
+            preparedStatement.setString(2, inv.getRecepterId());
             preparedStatement.executeUpdate();
+
+            //Et dans l'autre
+            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
+            preparedStatement.setString(2, inv.getEmitterId());
+            preparedStatement.setString(1, inv.getRecepterId());
+            preparedStatement.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

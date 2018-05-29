@@ -1,6 +1,7 @@
 package com.dant.app;
 
 import com.dant.entity.Token;
+import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
@@ -180,15 +181,15 @@ public class UserController {
 
     @POST
     @Path("/sendInvitation")
-    public Response sendInvitati(UserDTO dto, UserDTO invited) {
+    public Response sendInvitation(InvitationDTO invitationDto, TokenDTO user) {
         System.out.println("UserControler.sendInvitation :");
-        System.out.println(dto.pseudo +" :" +dto.token);
-        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+        System.out.println(invitationDto.getEmitterId() +" :" + user.getKey());
+        if (isNotBlank(invitationDto.getEmitterId()) && isNotBlank(user.getKey())) {
             System.out.println("UserControler.sendInvitation : fields are not blank");
             String json = null;
             try {
                 System.out.println("UserControler.sendInvitation : updating ");
-                userService.sendInvitation(dto, invited);
+                userService.sendInvitation(invitationDto, user);
                 System.out.println("UserControler.sendInvitation : update successfully done ! ");
                 System.out.println(json);
             } catch (ForbiddenException e) {

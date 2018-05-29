@@ -2,7 +2,10 @@ package com.dant.service;
 
 import com.dant.database.DAO;
 import com.dant.database.UserDAO;
+import com.dant.entity.Invitation;
 import com.dant.entity.User;
+import com.dant.entity.dto.InvitationDTO;
+import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.security.Encripter;
@@ -66,9 +69,10 @@ public class UserService {
         } else throw new ForbiddenException();
     }
 
-    public void sendInvitation(UserDTO dto, UserDTO invited) throws SQLException {
-        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
-            this.dao.saveInvitation(dto.pseudo, invited.pseudo);
+    public void sendInvitation(InvitationDTO invitationDto, TokenDTO user) throws SQLException {
+        if(this.dao.getToken(invitationDto.getEmitterId()).equals(user.getKey())){
+            Invitation i = new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId());
+            this.dao.saveInvitation(i);
         } else throw new ForbiddenException();
     }
 

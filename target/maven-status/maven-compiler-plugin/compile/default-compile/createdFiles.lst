@@ -1,5 +1,6 @@
 com\dant\database\Database.class
 com\dant\entity\dto\InvitationDemandDTO.class
+com\dant\entity\dto\TokenDTO.class
 com\dant\service\UserService.class
 com\dant\entity\Invitation.class
 com\dant\entity\dto\InvitationRequestDTO.class
@@ -28,11 +29,13 @@ com\dant\database\FriendDAO.class
 com\dant\entity\User.class
 com\dant\entity\InvitationRequestTable.class
 com\dant\entity\Coordinate.class
+com\dant\service\TokenService.class
 com\dant\entity\InvitationDemandTable.class
 com\dant\database\CoordinateDAO.class
 com\dant\exception\InternalServerExceptionMapper.class
+com\dant\security\Decrypted.class
 com\dant\entity\Account.class
 com\dant\app\Connection.class
+com\dant\database\TokenDAO.class
 com\dant\entity\dto\CoordinateDTO.class
-com\dant\security\decrypting.class
 com\dant\filter\GsonProvider.class
