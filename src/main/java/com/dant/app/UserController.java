@@ -26,11 +26,13 @@ public class UserController {
 
     private final UserService userService = new UserService();
 
-    @POST
-    public UserDTO create(UserDTO dto) {
-        userService.save(dto);
-        return dto;
-    }
+//    @POST
+//    @Path("/tests")
+//    public Response create(UserDTO dto, Token token) {
+//        Token t = token;
+//        userService.save(dto);
+//        return dto;
+//    }
 
     @POST
     @Path("/auth")
