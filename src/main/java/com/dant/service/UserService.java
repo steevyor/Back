@@ -1,6 +1,8 @@
 package com.dant.service;
 
 import com.dant.database.DAO;
+import com.dant.database.InvitationDAO;
+import com.dant.database.TokenDAO;
 import com.dant.database.UserDAO;
 import com.dant.entity.Invitation;
 import com.dant.entity.User;
@@ -17,17 +19,19 @@ import java.util.List;
 
 public class UserService {
 
-    private final UserDAO dao = new UserDAO();
+    private final UserDAO userdao = new UserDAO();
+    private final InvitationDAO invitationdao = new InvitationDAO();
+    private final TokenDAO tokendao = new TokenDAO();
 
     public User save(UserDTO dto) {
         User user = new User(dto.pseudo, dto.email, dto.password);
-        dao.save(user);
+        userdao.save(user);
         return user;
     }
 
     public boolean authenticate(UserDTO dto) throws SQLException {
         User user;
-        user = dao.get(dto.pseudo);
+        user = userdao.get(dto.pseudo);
         System.out.println("UserService.authenticate : UserPseudo =" +user.getPseudo());
         System.out.println("UserService.authenticate : UserPassword =" +user.getPassword());
         System.out.println("UserService.authenticate : UserDTOPassword =" +dto.password);
@@ -41,7 +45,7 @@ public class UserService {
 
     public boolean inscription(UserDTO dto) throws InternalServerException {
         System.out.printf("UserService.inscription : verifying user inexistance");
-        if (dao.doesExist(dto.pseudo)) {
+        if (userdao.doesExist(dto.pseudo)) {
             System.out.printf("UserService.inscription : user pseudo already exists");
             throw new ForbiddenException();
         } else {
@@ -50,7 +54,7 @@ public class UserService {
             String encryptedPassword = Encripter.encrypt(dto.password);
             System.out.println("UserService.inscription : userDTO password = "+dto.password
                     +" ; encrypted password = "+encryptedPassword);
-            dao.save(new User(dto.pseudo, dto.email, encryptedPassword));
+            userdao.save(new User(dto.pseudo, dto.email, encryptedPassword));
             System.out.println("UserService.inscription : user saved");
             return true;
         }
@@ -58,21 +62,21 @@ public class UserService {
 
 
     public List<String> sendFriendList(UserDTO dto) throws SQLException {
-        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
-            return this.dao.getFriends(dto.pseudo);
+        if(this.tokendao.get(dto.pseudo).equals(dto.token)){
+            return this.userdao.getFriends(dto.pseudo);
         } else throw new ForbiddenException();
     }
 
     public List<User> sendFriendsPositionList(UserDTO dto) throws SQLException {
-        if(this.dao.getToken(dto.pseudo).equals(dto.token)){
-            return this.dao.getFriendsPosition(dto.pseudo);
+        if(this.tokendao.get(dto.pseudo).equals(dto.token)){
+            return this.userdao.getFriendsPosition(dto.pseudo);
         } else throw new ForbiddenException();
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO user) throws SQLException {
-        if(this.dao.getToken(invitationDto.getEmitterId()).equals(user.getKey())){
+        if(this.tokendao.get(invitationDto.getEmitterId()).equals(user.getKey())){
             Invitation i = new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId());
-            this.dao.saveInvitation(i);
+            this.invitationdao.save(i);
         } else throw new ForbiddenException();
     }
 

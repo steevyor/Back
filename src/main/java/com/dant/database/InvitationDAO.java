@@ -22,14 +22,15 @@ public class InvitationDAO implements  DAO<Invitation>{
 
     @Override
     public void save(Invitation object) {
-        try {
-                preparedStatement = connection.prepareStatement("INSERT INTO invitation(emitter, receiver) VALUES(?, ?);");
+            try (Statement st = connection.createStatement()) {
+                //Relation dans un sens
+                preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
                 preparedStatement.setString(1, object.getEmitterId());
                 preparedStatement.setString(2, object.getRecepterId());
                 preparedStatement.executeUpdate();
-        } catch (SQLException e){
-            throw new InternalServerException(e);
-        }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     @Override

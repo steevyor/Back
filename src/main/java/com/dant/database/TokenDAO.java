@@ -34,24 +34,20 @@ public class TokenDAO implements DAO<Token>{
 
     @Override
     public Token get(String pseudo) throws SQLException {
-        ResultSet result = null;
-        String key = null;
-        String timer = null;
+
         try (Statement st = connection.createStatement()) {
-            result = st.executeQuery("SELECT * FROM token WHERE pseudo =\'" + pseudo + "\';");
-            if (result.next()) {
-                pseudo = result.getString("userPseudp");
-                key = result.getString("tokenKey");
-                timer = result.getString("timer");
-                Token token = new Token(key, timer);
-                return token;
-            }
+            ResultSet result = st.executeQuery("SELECT tokenKey, timer FROM token WHERE userPseudo = '" +pseudo + "' ;");
+            if(result.next()){
+                String timer = result.getString("timer");
+                String key = result.getString("tokenKey");
+                return new Token(key, timer);
+            } else return null;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException();
+            return null;
         }
-        return new Token(key, timer);
     }
+
 
     public Token getByKey(String key) throws SQLException {
         ResultSet result = null;

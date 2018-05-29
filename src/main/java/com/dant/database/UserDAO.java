@@ -186,30 +186,4 @@ public class UserDAO implements DAO<User> {
     }
 
 
-    public String getToken(String key) {
-        try (Statement st = connection.createStatement()) {
-            ResultSet result = st.executeQuery("SELECT tokenKey FROM token WHERE userPseudo = '" +key + "' ;");
-            if(result.next()){
-                return result.getString("tokenKey");
-            } else return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void saveInvitation(Invitation inv) {
-        try (Statement st = connection.createStatement()) {
-            //Relation dans un sens
-            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
-            preparedStatement.setString(1, inv.getEmitterId());
-            preparedStatement.setString(2, inv.getRecepterId());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
 }
