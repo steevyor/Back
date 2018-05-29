@@ -205,14 +205,6 @@ public class UserDAO implements DAO<User> {
             preparedStatement.setString(1, inv.getEmitterId());
             preparedStatement.setString(2, inv.getRecepterId());
             preparedStatement.executeUpdate();
-
-            //Et dans l'autre
-            preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
-            preparedStatement.setString(2, inv.getEmitterId());
-            preparedStatement.setString(1, inv.getRecepterId());
-            preparedStatement.executeUpdate();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
