@@ -1,6 +1,7 @@
 package com.dant.database;
 
 import com.dant.entity.Token;
+import com.dant.entity.User;
 import com.dant.exception.InternalServerException;
 
 import java.sql.*;
@@ -21,6 +22,7 @@ public class TokenDAO implements DAO<Token>{
             preparedStatement.setString(1, object.getPseudo()); //recup pseudo
             preparedStatement.setString(2, object.getTokenKey());// recup token
             preparedStatement.setString(3, object.getTimer());
+            preparedStatement.executeUpdate();
 
         }catch (SQLException e) {
 
@@ -52,12 +54,22 @@ public class TokenDAO implements DAO<Token>{
 
     @Override
     public void delete(Token object) {
+        try(Statement st = connection.createStatement()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM 'token' WHERE tokenKey = (?) ;");
+            preparedStatement.setString(object.getTokenKey());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public Token update(Token object) {
         return null;
+
+        //Génération d'un nouveau token ?
+
     }
 
     @Override
