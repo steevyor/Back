@@ -1,12 +1,15 @@
 package com.dant.security;
 
-public class Decrypter {
+public class Decrypted {
 
-    String crypte = "";
 
-    public static Decrypter(String pwd){this.setCrypt(pwd);}
+    public static String decrypt(String pwd){
+        return setCrypt(pwd);
+    }
 
-    public String setCrypt(String password){
+    public static String setCrypt(String password){
+
+        String crypte = "";
         for (int i=0; i<password.length();i++){
             int c=password.charAt(i)^98;
             crypte=crypte+(char)c;

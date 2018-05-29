@@ -13,7 +13,7 @@ public class Token {
     private String key;
 
 
-    public Token(String pseudo, String key, String timer){
+    public Token(){
         //System.out.println("Token : creating instance now");
         generateTokenKey();
         setTimer();
@@ -24,6 +24,12 @@ public class Token {
         this.key = key;
         setTimer();
     }
+
+    public Token(String key,String currentTime){
+        this.key = key;
+        this.currentTime = currentTime;
+    }
+
 
     private void generateTokenKey(){
         //System.out.println("    Token : generating token key now");
@@ -42,11 +48,6 @@ public class Token {
     public void updateTimer(){
         LocalDateTime now = LocalDateTime.now();
         this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
-    }
-
-    public String getPseudo() {
-        User user = new User();
-        return user.getPseudo();
     }
 
     public String getTokenKey() {

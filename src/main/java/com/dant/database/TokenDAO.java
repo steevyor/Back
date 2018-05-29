@@ -13,11 +13,16 @@ public class TokenDAO implements DAO<Token>{
     private final Connection connection;
     public TokenDAO(){ this.connection=Database.connect();}
 
+
     @Override
     public void save(Token object) {
+
+    }
+
+    public void save(Token object, String userPseudo) {
         try (Statement st = connection.createStatement()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO token (userPseudo, tokenKey, timer) VALUES(?, ?, ?) ");
-            preparedStatement.setString(1, object.getPseudo()); //recup pseudo
+            preparedStatement.setString(1, userPseudo); //recup pseudo
             preparedStatement.setString(2, object.getTokenKey());// recup token
             preparedStatement.setString(3, object.getTimer());
             preparedStatement.executeUpdate();
@@ -25,6 +30,7 @@ public class TokenDAO implements DAO<Token>{
             throw new InternalServerException(e);
         }
     }
+
 
     @Override
     public Token get(String pseudo) throws SQLException {
@@ -37,21 +43,21 @@ public class TokenDAO implements DAO<Token>{
                 pseudo = result.getString("userPseudp");
                 key = result.getString("tokenKey");
                 timer = result.getString("timer");
-                Token token = new Token(pseudo, key, timer);
+                Token token = new Token(key, timer);
                 return token;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException();
         }
-        return new Token(pseudo, key, timer);
+        return new Token(key, timer);
     }
 
     @Override
     public void delete(Token object) {
         try(Statement st = connection.createStatement()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE tokenKey = (?) ;");
-            preparedStatement.setString(1, object.getTokenKey()); /// voir classe Token ?
+            preparedStatement.setString(1, object.getTokenKey());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
