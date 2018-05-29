@@ -11,8 +11,6 @@ import java.util.List;
 public class TokenDAO implements DAO<Token>{
 
     private final Connection connection;
-
-
     public TokenDAO(){ this.connection=Database.connect();}
 
     @Override
@@ -23,11 +21,8 @@ public class TokenDAO implements DAO<Token>{
             preparedStatement.setString(2, object.getTokenKey());// recup token
             preparedStatement.setString(3, object.getTimer());
             preparedStatement.executeUpdate();
-
         }catch (SQLException e) {
-
             throw new InternalServerException(e);
-
         }
     }
 
@@ -55,8 +50,8 @@ public class TokenDAO implements DAO<Token>{
     @Override
     public void delete(Token object) {
         try(Statement st = connection.createStatement()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM 'token' WHERE tokenKey = (?) ;");
-            preparedStatement.setString(object.getTokenKey());
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE tokenKey = (?) ;");
+            preparedStatement.setString(1, object.getTokenKey()); /// voir classe Token ?
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

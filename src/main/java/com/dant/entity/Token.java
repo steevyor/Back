@@ -13,11 +13,11 @@ public class Token {
     private String key;
 
 
-    public Token(){
-        System.out.println("Token : creating instance now");
+    public Token(String pseudo, String key, String timer){
+        //System.out.println("Token : creating instance now");
         generateTokenKey();
         setTimer();
-        System.out.println("Token : token instance successfully created");
+        //System.out.println("Token : token instance successfully created");
     }
 
     public Token(String key){
@@ -26,17 +26,17 @@ public class Token {
     }
 
     private void generateTokenKey(){
-        System.out.println("    Token : generating token key now");
+        //System.out.println("    Token : generating token key now");
         this.key = Long.toString( Math.abs( random.nextLong() ), 64);
-        System.out.println("    Token : token key generated : "+this.key);
+        //System.out.println("    Token : token key generated : "+this.key);
     }
 
     private void setTimer(){
-        System.out.println("    Token : setting timer now");
+        //System.out.println("    Token : setting timer now");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("    Token : LocalDateTime initialised");
+        //System.out.println("    Token : LocalDateTime initialised");
         this.currentTime= now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss",Locale.ENGLISH));
-        System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
+        //System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
     public void updateTimer(){
@@ -44,4 +44,16 @@ public class Token {
         this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
     }
 
+    public String getPseudo() {
+        User user = new User();
+        return user.getPseudo();
+    }
+
+    public String getTokenKey() {
+        return this.key;
+    }
+
+    public String getTimer() {
+        return this.currentTime;
+    }
 }
