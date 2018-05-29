@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Path("/api/user")
@@ -48,13 +49,16 @@ public class UserController {
                 if (userService.authenticate(dto)) {
                     System.out.println("UserControler.authenticate : user correctly authenticated !");
                     List list = new ArrayList();
+                    HashMap map = new HashMap();
                     System.out.println("UserControler.authenticate : creating token now ");
                     Token token = new Token();
                     System.out.println("UserControler.authenticate : token successfully created !");
                     list.add(dto);
                     list.add(token);
+                    map.put("user", dto);
+                    map.put("token", token);
                     System.out.println("UserControler.authenticate : adding data to json ");
-                    json = gson.toJson(list);
+                    json = gson.toJson(map);
                     System.out.println("UserControler.authenticate : json successfully created ! ");
                     System.out.println(json);
                 }
