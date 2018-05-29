@@ -51,7 +51,7 @@ public class UserController {
                     System.out.println("UserControler.authenticate : creating token now ");
                     Token token = new Token();
                     System.out.println("UserControler.authenticate : token successfully created !");
-                    list.add(dto.pseudo);
+                    list.add(dto);
                     list.add(token);
                     System.out.println("UserControler.authenticate : adding data to json ");
                     json = gson.toJson(list);

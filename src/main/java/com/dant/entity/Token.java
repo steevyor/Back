@@ -58,8 +58,8 @@ public class Token {
         return this.currentTime;
     }
 
-    public boolean isTimerGapValid(String timer){
-
+    public boolean isTimerGapValid(String newTimer){
+//        LocalDateTime
         return true;
     }
 }
