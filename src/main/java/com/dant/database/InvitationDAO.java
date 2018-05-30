@@ -1,14 +1,10 @@
 package com.dant.database;
 
-import com.dant.entity.Coordinate;
 import com.dant.entity.Invitation;
-import com.dant.entity.InvitationDemandTable;
-import com.dant.entity.User;
 import com.dant.exception.InternalServerException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class InvitationDAO implements  DAO<Invitation>{
@@ -37,9 +33,9 @@ public class InvitationDAO implements  DAO<Invitation>{
     public Invitation get(String key) {
         ResultSet result = null;
         try{
+            result = preparedStatement.executeQuery("select emitter, receiver from invitation where receiver = (?) or emitter = (?);");
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, key);
-            result = preparedStatement.executeQuery("select emitter, receiver from invitation where receiver = (?) or emitter = (?);");
             String emitter = result.getString("emitter");
             String receiver = result.getString("receiver");
             return new Invitation(emitter, receiver);

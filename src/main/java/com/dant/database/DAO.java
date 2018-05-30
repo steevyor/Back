@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface DAO<T> {
 
-    void save(T object);
+    void save(T object) throws SQLException;
 
     T get(String key) throws SQLException;
 
-    void delete(T object);
+    void delete(T object) throws SQLException;
 
     T update(T object);
 

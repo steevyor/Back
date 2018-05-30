@@ -1,12 +1,15 @@
 package com.dant.entity;
 
+import sun.nio.cs.US_ASCII;
+
+import java.util.ArrayList;
+
 public class User {
 
     private String pseudo;
     private String email;
-    private FriendList friendList;
-    private InvitationDemandTable invitationDemands;
-    private InvitationRequestTable invitationRequest;
+    private ArrayList<User> friendList;
+    private ArrayList<Invitation> invitations;
     private Boolean isConnected;
     private Boolean isVisible;
     private Coordinate coordinate;
@@ -17,9 +20,10 @@ public class User {
 
         this.pseudo = pseudo;
         this.email = email;
-        this.friendList = new FriendList();
+        this.friendList = new ArrayList<User>();
         this.isConnected = false;
         this.isVisible  = false;
+        this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = password;
     }
@@ -29,9 +33,10 @@ public class User {
 
         this.pseudo = pseudo;
         this.email = email;
-        this.friendList = new FriendList();
+        this.friendList = new ArrayList<User>();
         this.isConnected = false;
         this.isVisible  = false;
+        this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = null;
     }
@@ -40,9 +45,10 @@ public class User {
     public User(String pseudo) {
         this.pseudo = pseudo;
         this.email = "";
-        this.friendList = new FriendList();
+        this.friendList = new ArrayList<User>();
         this.isConnected = false;
         this.isVisible  = false;
+        this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = "";
     }
@@ -50,9 +56,10 @@ public class User {
     public User(String pseudo, Coordinate c) {
         this.pseudo = pseudo;
         this.email = "";
-        this.friendList = new FriendList();
+        this.friendList = new ArrayList<User>();
         this.isConnected = false;
         this.isVisible  = false;
+        this.invitations = new ArrayList<Invitation>();
         this.coordinate = c;
         //a encrypter
         this.password = "";
@@ -61,9 +68,10 @@ public class User {
     public User() {
         this.pseudo = "";
         this.email = "";
-        this.friendList = new FriendList();
+        this.friendList = new ArrayList<User>();
         this.isConnected = false;
         this.isVisible  = false;
+        this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = "";
     }
@@ -90,21 +98,17 @@ public class User {
         this.coordinate = coordinate;
     }
 
-    public FriendList getFriendList() {
+    public ArrayList<User> getFriendList() {
         return this.friendList;
     }
 
-    public void setFriendList(FriendList friendList) {
+    public void setFriendList(ArrayList<User> friendList) {
         this.friendList = friendList;
     }
 
-    public void getInvitationDemands() { this.invitationDemands = invitationDemands;  }
+    public ArrayList<Invitation>  getInvitations() { return this.invitations ;  }
 
-    public void setInvitationDemands(InvitationDemandTable invitationDemands) { this.invitationDemands = invitationDemands; }
-
-    public void getInvitationRequest() { this.invitationRequest = invitationRequest  ; }
-
-    public void setInvitationRequest(InvitationRequestTable invitationRequest) {this.invitationRequest = invitationRequest; }
+    public void setInvitations(ArrayList<Invitation> invitations) { this.invitations = invitations; }
 
     public Boolean getConnected() {
         return isConnected;

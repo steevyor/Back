@@ -1,8 +1,6 @@
 package com.dant.database;
 
 import com.dant.entity.Coordinate;
-import com.dant.entity.FriendList;
-import com.dant.entity.Invitation;
 import com.dant.entity.User;
 import com.dant.exception.InternalServerException;
 
@@ -49,7 +47,7 @@ public class UserDAO implements DAO<User> {
                 String password = result.getString("password");
                 User user = new User(pseudo,email,password);
                 user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"), result.getDouble("yCoordinates")));
-                user.setFriendList(new FriendList());
+                user.setFriendList(new ArrayList<User>());
                 System.out.println("UserDAO.get : query result User = "+user.getPseudo() +";" +user.getEmail() +";" +user.getPassword() );
                 return user;
             }
