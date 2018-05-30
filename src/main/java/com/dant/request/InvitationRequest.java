@@ -5,21 +5,21 @@ import com.dant.entity.dto.TokenDTO;
 
 public class InvitationRequest {
 
-    public String emitterId;
-    public String recepterId;
+    public String emitterPseudo;
+    public String recepterPseudo;
     public String tokenKey;
 
     public InvitationRequest(){
     }
 
-    public InvitationRequest(String emitterId, String recepterId, String tokenKey) {
-        this.emitterId = emitterId;
-        this.recepterId = recepterId;
+    public InvitationRequest(String emitterPseudo, String recepterPseudo, String tokenKey) {
+        this.emitterPseudo = emitterPseudo;
+        this.recepterPseudo = recepterPseudo;
         this.tokenKey = tokenKey;
     }
 
     public InvitationDTO getInvitationDTO() {
-        return new InvitationDTO(this.emitterId, this.recepterId);
+        return new InvitationDTO(this.emitterPseudo, this.recepterPseudo);
     }
 
     public TokenDTO getTokenDTO(){

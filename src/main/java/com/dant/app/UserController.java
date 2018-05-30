@@ -51,7 +51,8 @@ public class UserController {
                 userService.save(saveRequest.getUserDTO());
                 System.out.println("acepted");
                 String json = null;
-                HashMap map = new HashMap();tokenService.updateTokenTimer(tokenDTO);
+                HashMap map = new HashMap();
+                tokenService.updateTokenTimer(tokenDTO);
                 map.put("token", (tokenDTO));
                 json = gson.toJson(map);
                 Response.status(Response.Status.ACCEPTED);
@@ -219,10 +220,19 @@ public class UserController {
             System.out.println("UserControler.sendInvitation : fields are not blank");
             String json = null;
             try {
-                System.out.println("UserControler.sendInvitation : updating ");
-                userService.sendInvitation(invitationDTO, tokenDTO);
-                System.out.println("UserControler.sendInvitation : update successfully done ! ");
-                System.out.println(json);
+                if(tokenService.canUseService(tokenDTO)) {
+                    System.out.println("UserControler.sendInvitation : updating ");
+                    userService.sendInvitation(invitationDTO, tokenDTO);
+                    System.out.println("UserControler.sendInvitation : update successfully done ! ");
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    map.put("token", (tokenDTO));
+                    json = gson.toJson(map);
+                    Response.status(Response.Status.ACCEPTED);
+                }else{
+                    System.out.println("nucepted");
+                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                }
             } catch (ForbiddenException e) {
                 System.out.println(e);
                 return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -230,8 +240,8 @@ public class UserController {
                 System.out.println(f);
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            //System.out.println("UserControler.sendInvitation : now returning response to sendInvitation request ");
-            return Response.status(Response.Status.ACCEPTED).build();
+            System.out.println("UserControler.sendInvitation : now returning response to sendInvitation request ");
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
         } else {
             System.out.println("NO_CONTENT Exception");
