@@ -5,6 +5,7 @@ import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
+import com.dant.request.InvitationRequest;
 import com.dant.request.SaveRequest;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
@@ -165,7 +166,7 @@ public class UserController {
 
     @POST
     @Path("/friendPositions")
-    public Response sendFriendsPositionsList(UserDTO dto ) {
+    public Response sendFriendsPositionsList(UserDTO dto) {
         System.out.println("UserControler.sendFriendsPositions :");
         System.out.println(dto.pseudo +" :" +dto.token);
         if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
@@ -196,15 +197,17 @@ public class UserController {
 
     @POST
     @Path("/sendInvitation")
-    public Response sendInvitation(InvitationDTO invitationDto, TokenDTO user) {
+    public Response sendInvitation(InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
         System.out.println("UserControler.sendInvitation :");
-        System.out.println(invitationDto.getEmitterId() +" :" + user.getKey());
-        if (isNotBlank(invitationDto.getEmitterId()) && isNotBlank(user.getKey())) {
+        System.out.println(invitationDTO.getEmitterId() +" :" + tokenDTO.getKey());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
             System.out.println("UserControler.sendInvitation : fields are not blank");
             String json = null;
             try {
                 System.out.println("UserControler.sendInvitation : updating ");
-                userService.sendInvitation(invitationDto, user);
+                userService.sendInvitation(invitationDTO, tokenDTO);
                 System.out.println("UserControler.sendInvitation : update successfully done ! ");
                 System.out.println(json);
             } catch (ForbiddenException e) {
