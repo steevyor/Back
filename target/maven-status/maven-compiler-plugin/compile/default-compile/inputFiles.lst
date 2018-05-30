@@ -5,7 +5,6 @@ C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\database\UserDA
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\exception\InternalServerExceptionMapper.java
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\app\App.java
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\entity\dto\InvitationDemandDTO.java
-C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\security\tokenGenerator.java
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\entity\Friend.java
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\entity\Invitation.java
 C:\Users\Henri\Desktop\backend_locapptest\src\main\java\com\dant\app\TestEndpoint.java

@@ -1,5 +1,7 @@
 package com.dant.entity;
 
+import jdk.vm.ci.meta.Local;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -11,6 +13,7 @@ public class Token {
     private static SecureRandom random = new SecureRandom();
     String currentTime;
     private String key;
+    LocalDateTime currentDateTime;
 
 
     public Token(){
@@ -41,12 +44,14 @@ public class Token {
         //System.out.println("    Token : setting timer now");
         LocalDateTime now = LocalDateTime.now();
         //System.out.println("    Token : LocalDateTime initialised");
+        this.currentDateTime = now;
         this.currentTime= now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss",Locale.ENGLISH));
         //System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
     public void updateTimer(){
         LocalDateTime now = LocalDateTime.now();
+        this.currentDateTime = now;
         this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
     }
 
@@ -59,7 +64,21 @@ public class Token {
     }
 
     public boolean isTimerGapValid(String newTimer){
-//        LocalDateTime
-        return true;
+        LocalDateTime currentInteractionDateTime = LocalDateTime.now();
+        LocalDateTime previousInteractionDateTime = LocalDateTime.parse(newTimer);
+
+        int currentHour = currentInteractionDateTime.getHour();
+        int currentDay = currentInteractionDateTime.getDayOfYear();
+        int currentYear = currentInteractionDateTime.getYear();
+
+        int previousHour = previousInteractionDateTime.getHour();
+        int previousDay = previousInteractionDateTime.getDayOfYear();
+        int previousYear = previousInteractionDateTime.getYear();
+
+        if(currentYear != previousYear && currentDay >= 30){
+            return false;
+        }else if(currentDay >= (previousDay)+30){
+            return false;
+        }else return true;
     }
 }
