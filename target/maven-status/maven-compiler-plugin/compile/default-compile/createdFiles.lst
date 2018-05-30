@@ -35,6 +35,7 @@ com\dant\database\CoordinateDAO.class
 com\dant\exception\InternalServerExceptionMapper.class
 com\dant\security\Decrypted.class
 com\dant\entity\Account.class
+com\dant\request\SaveRequest.class
 com\dant\app\Connection.class
 com\dant\database\TokenDAO.class
 com\dant\entity\dto\CoordinateDTO.class

@@ -13,7 +13,7 @@ public class Token {
     private static SecureRandom random = new SecureRandom();
     String currentTime;
     private String key;
-    LocalDateTime currentDateTime;
+    LocalDateTime timer;
 
 
     public Token(){
@@ -44,14 +44,14 @@ public class Token {
         //System.out.println("    Token : setting timer now");
         LocalDateTime now = LocalDateTime.now();
         //System.out.println("    Token : LocalDateTime initialised");
-        this.currentDateTime = now;
+        this.timer = now;
         this.currentTime= now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss",Locale.ENGLISH));
         //System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
     public void updateTimer(){
         LocalDateTime now = LocalDateTime.now();
-        this.currentDateTime = now;
+        this.timer = now;
         this.currentTime= new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE).format(now);
     }
 
@@ -63,9 +63,10 @@ public class Token {
         return this.currentTime;
     }
 
-    public boolean isTimerGapValid(String newTimer){
+    public boolean isTimerGapValid(){
         LocalDateTime currentInteractionDateTime = LocalDateTime.now();
-        LocalDateTime previousInteractionDateTime = LocalDateTime.parse(newTimer);
+        //LocalDateTime previousInteractionDateTime = LocalDateTime.parse(newTimer);
+        LocalDateTime previousInteractionDateTime = this.timer;
 
         int currentHour = currentInteractionDateTime.getHour();
         int currentDay = currentInteractionDateTime.getDayOfYear();

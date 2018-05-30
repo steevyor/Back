@@ -5,9 +5,11 @@ import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
+import com.dant.request.SaveRequest;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jdk.jfr.ContentType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -31,10 +33,23 @@ public class UserController {
 
     @POST
     @Path("/tests")
-    public Response create(UserDTO udto, TokenDTO tdto) {
-        Token t = new Token(tdto.getKey());
-        userService.save(udto);
-        return Response.status(Response.Status.ACCEPTED).build();
+    public Response create(SaveRequest saveRequest) {
+        System.out.println("in tests");
+        UserDTO aze = saveRequest.getUserDTO();
+        System.out.println(aze.getPseudo());
+        String a = saveRequest.getTokenDTO().getKey();
+        System.out.println(a);
+        System.out.println(saveRequest.getUserDTO().getPseudo());
+        Token t = new Token(saveRequest.getTokenDTO().getKey());
+        System.out.println("tioken bviou");
+        if(t.isTimerGapValid() ){
+            userService.save(saveRequest.getUserDTO());
+            System.out.println("acepted");
+            return Response.status(Response.Status.ACCEPTED).build();
+        }else{
+            System.out.println("nucepted");
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
 
     @POST

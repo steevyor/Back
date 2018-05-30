@@ -12,8 +12,7 @@ public class TokenService {
 
     public boolean canUseService(TokenDTO dto) throws SQLException{
         Token currentInDataBaseToken = dao.getByKey(dto.getKey());
-
-        return true;
+        return currentInDataBaseToken.isTimerGapValid();
     }
 
 }
