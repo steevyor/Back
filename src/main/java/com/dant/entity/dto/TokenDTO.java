@@ -1,5 +1,7 @@
 package com.dant.entity.dto;
 
+import com.dant.entity.Token;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -20,6 +22,11 @@ public class TokenDTO {
         this.currentTime = currentTime;
     }
 
+    public TokenDTO(Token t){
+        this.key = t.getTokenKey();
+        this.currentTime = t.getTimer();
+    }
+
 
     public String getPseudo() {return pseudo;}
     public String getKey() {return key;}
@@ -27,4 +34,5 @@ public class TokenDTO {
     public void setPseudo(String pseudo) {this.pseudo = pseudo;}
     public void setKey(String key) {this.key = key;}
     public void setCurrentTime(String currentTime) {this.currentTime = currentTime;}
+    public void setCurrentTimeNow() {this.currentTime = LocalDateTime.now().toString();}
 }

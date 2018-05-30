@@ -2,6 +2,8 @@ package com.dant.entity;
 
 //import jdk.vm.ci.meta.Local;
 
+import com.dant.Print;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -45,7 +47,7 @@ public class Token {
         LocalDateTime now = LocalDateTime.now();
         //System.out.println("    Token : LocalDateTime initialised");
         this.timer = now;
-        this.currentTime= now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss",Locale.ENGLISH));
+        this.currentTime= now.toString();
         //System.out.println("    Token : current time set with SimpleDateFormat : "+this.currentTime);
     }
 
@@ -65,8 +67,10 @@ public class Token {
 
     public boolean isTimerGapValid(){
         LocalDateTime currentInteractionDateTime = LocalDateTime.now();
+        Print.p("Token.isTimerGapValid : currentInteractionDateTime :"+currentInteractionDateTime);
         //LocalDateTime previousInteractionDateTime = LocalDateTime.parse(newTimer);
         LocalDateTime previousInteractionDateTime = this.timer;
+        Print.p("Token.isTimerGapValid : previousInteractionDateTime : "+previousInteractionDateTime);
 
         int currentHour = currentInteractionDateTime.getHour();
         int currentDay = currentInteractionDateTime.getDayOfYear();
@@ -77,9 +81,14 @@ public class Token {
         int previousYear = previousInteractionDateTime.getYear();
 
         if(currentYear != previousYear && currentDay >= 30){
+            Print.p("Token.isTimerGapValid : False");
             return false;
         }else if(currentDay >= (previousDay)+30){
+            Print.p("Token.isTimerGapValid : False");
             return false;
-        }else return true;
+        }else {
+            Print.p("Token.isTimerGapValid : True");
+            return true;
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.request.InvitationRequest;
 import com.dant.request.SaveRequest;
+import com.dant.service.TokenService;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,25 +32,37 @@ public class UserController {
     final Gson gson = builder.create();
 
     private final UserService userService = new UserService();
+    private final TokenService tokenService = new TokenService();
 
     @POST
     @Path("/tests")
     public Response create(SaveRequest saveRequest) {
         System.out.println("in tests");
-        UserDTO aze = saveRequest.getUserDTO();
-        System.out.println(aze.getPseudo());
+        TokenDTO tokenDTO = saveRequest.getTokenDTO();
+        UserDTO userDTO = saveRequest.getUserDTO();
+        System.out.println(userDTO.getPseudo());
         String a = saveRequest.getTokenDTO().getKey();
         System.out.println(a);
         System.out.println(saveRequest.getUserDTO().getPseudo());
         Token t = new Token(saveRequest.getTokenDTO().getKey());
         System.out.println("tioken bviou");
-        if(t.isTimerGapValid() ){
-            userService.save(saveRequest.getUserDTO());
-            System.out.println("acepted");
-            return Response.status(Response.Status.ACCEPTED).build();
-        }else{
-            System.out.println("nucepted");
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+        try {
+            if(tokenService.canUseService(tokenDTO)){
+                userService.save(saveRequest.getUserDTO());
+                System.out.println("acepted");
+                String json = null;
+                HashMap map = new HashMap();tokenService.updateTokenTimer(tokenDTO);
+                map.put("token", (tokenDTO));
+                json = gson.toJson(map);
+                Response.status(Response.Status.ACCEPTED);
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
+            }else{
+                System.out.println("nucepted");
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
