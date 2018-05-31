@@ -84,7 +84,7 @@ public class UserController {
                     List list = new ArrayList();
                     HashMap map = new HashMap();
                     System.out.println("UserControler.authenticate : creating token now ");
-                    Token token = new Token();
+                    Token token = new Token(dto.getPseudo());
                     TokenDTO tokenDTO = new TokenDTO(token.getTokenKey(), token.getTimer());
 
                     System.out.println("UserControler.authenticate : token successfully created !");
@@ -162,16 +162,18 @@ public class UserController {
 
     @POST
     @Path("/friendList")
-    public Response sendFriendList(UserDTO dto ) {
+    public Response sendFriendList(UserRequest userRequest ) {
         System.out.println("UserControler.sendFriendlist :");
-        System.out.println(dto.pseudo +" :" +dto.token);
-        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+        UserDTO user = userRequest.getUserDTO();
+        TokenDTO token = userRequest.getTokenDTO();
+        System.out.println(user.getPseudo() +" :" +token.getKey());
+        if (isNotBlank(user.getPseudo()) && isNotBlank(token.getKey())) {
             System.out.println("UserControler.sendFriendlist : fields are not blank");
             String json = null;
             try {
                 System.out.println("UserControler.sendFriendlist : sending now");
                 System.out.println("UserControler.sendFriendlist : adding data to json ");
-                json = gson.toJson(userService.sendFriendList(dto));
+                json = gson.toJson(userService.sendFriendList(user));
                 System.out.println("UserControler.sendFriendlist : json successfully created ! ");
                 System.out.println(json);
             } catch (ForbiddenException e) {
