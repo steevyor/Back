@@ -84,7 +84,16 @@ public class TokenDAO implements DAO<Token>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    public void deleteByKey(String key) {
+        try(Statement st = connection.createStatement()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE tokenKey = (?) ;");
+            preparedStatement.setString(1, key);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -57,4 +57,10 @@ public class TokenService {
             return false;
         }
     }
+
+    public void deleteToken(TokenDTO tokenDTO) throws SQLException {
+        System.out.println("TokenService.deleteToken : deleting token " +tokenDTO.getKey());
+        dao.deleteByKey(tokenDTO.getKey());
+        System.out.println("TokenService.deleteToken : token deleted");
+    }
 }
