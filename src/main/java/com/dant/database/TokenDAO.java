@@ -17,7 +17,6 @@ public class TokenDAO implements DAO<Token>{
 
     @Override
     public void save(Token object) {
-
     }
 
     public void save(Token object, String userPseudo) {

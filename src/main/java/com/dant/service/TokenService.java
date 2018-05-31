@@ -28,10 +28,33 @@ public class TokenService {
         dao.update(new Token(dto.getKey(), dto.getCurrentTime()));
     }
 
-    public Token save(Token token, String userPseudo) throws SQLException{
-        System.out.println("TokenService.save : saving token ("+token.getTokenKey() +"; " +token.getTimer() +")");
-        dao.save(token, userPseudo);
-        System.out.println("TokenService.save : token successfully saved, returning token");
-        return token;
+    public Token save(TokenDTO dto, String userPseudo) throws SQLException{
+        System.out.println("TokenService.save : saving token ("+dto.getKey() +"; " +dto.getCurrentTime() +")");
+        Token token = new Token(dto.getKey(), dto.getCurrentTime());
+        if(dao.get(userPseudo) != null){
+            System.out.println("TokenService.save : token successfully saved, returning token");
+            dao.update(dao.get(userPseudo));
+            return dao.get(userPseudo);
+        }else {
+            dao.save(token, userPseudo);
+            System.out.println("TokenService.save : token successfully saved, returning token");
+            return token;
+        }
+    }
+
+    public boolean doesTokenExists(TokenDTO tokenDTO) throws SQLException{
+        System.out.println("TokenService.doesTokenExists : testing if tokens already exists");
+        if(tokenDTO.getPseudo() != null) {
+            if (dao.get(tokenDTO.getPseudo()) != null) {
+                System.out.println("TokenService.doesTokenExists : TRUE ( found by pseudo ) ");
+                return true;
+            } else return false;
+        }else if(dao.getByKey(tokenDTO.getKey()) != null ){
+            System.out.println("TokenService.doesTokenExists : TRUE ( found by key ) ");
+            return true;
+        }else{
+            System.out.println("TokenService.doesTokenExists : returning FALSE");
+            return false;
+        }
     }
 }
