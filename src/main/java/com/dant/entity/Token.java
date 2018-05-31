@@ -71,8 +71,9 @@ public class Token {
         LocalDateTime currentInteractionDateTime = LocalDateTime.now();
         Print.p("Token.isTimerGapValid : currentInteractionDateTime :"+currentInteractionDateTime);
         //LocalDateTime previousInteractionDateTime = LocalDateTime.parse(newTimer);
-        LocalDateTime previousInteractionDateTime = this.timer;
-        Print.p("Token.isTimerGapValid : previousInteractionDateTime : "+previousInteractionDateTime);
+        String timer = this.currentTime;
+        LocalDateTime previousInteractionDateTime = LocalDateTime.parse(timer);
+        Print.p("Token.isTimerGapValid : previousInteractionDateTime : "+timer);
 
         int currentHour = currentInteractionDateTime.getHour();
         int currentDay = currentInteractionDateTime.getDayOfYear();
