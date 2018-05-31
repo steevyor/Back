@@ -4,6 +4,7 @@ import com.dant.database.TokenDAO;
 import com.dant.entity.Token;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.sql.SQLException;
 
@@ -42,22 +43,25 @@ public class TokenService {
         }
     }
 
-    public boolean doesTokenExists(TokenDTO tokenDTO) throws SQLException{
+    public boolean doesTokenExists(TokenDTO tokenDTO) throws SQLException {
+        System.out.println("TokenService.doesTokenExists : token =" + tokenDTO.getKey() + ";" + tokenDTO.getCurrentTime());
+        System.out.println(tokenDTO.getPseudo());
         System.out.println("TokenService.doesTokenExists : testing if tokens already exists");
-        if(tokenDTO.getPseudo() != null) {
-            if (dao.get(tokenDTO.getPseudo()) != null) {
-                System.out.println("TokenService.doesTokenExists : TRUE ( found by pseudo ) ");
+        System.out.println(tokenDTO.getPseudo());
+        try{
+            if (dao.getByKey(tokenDTO.getKey()) != null) {
+                System.out.println("TokenService.doesTokenExists : TRUE ( found by key ) ");
                 return true;
-            } else return false;
-        }else if(dao.getByKey(tokenDTO.getKey()) != null ){
-            System.out.println("TokenService.doesTokenExists : TRUE ( found by key ) ");
-            return true;
-        }else{
-            System.out.println("TokenService.doesTokenExists : returning FALSE");
+            } else {
+                System.out.println("TokenService.doesTokenExists : returning FALSE");
+                return false;
+            }
+        }catch(NullPointerException e){
+            return false;
+        }catch(SQLException f){
             return false;
         }
     }
-
     public void deleteToken(TokenDTO tokenDTO) throws SQLException {
         System.out.println("TokenService.deleteToken : deleting token " +tokenDTO.getKey());
         dao.deleteByKey(tokenDTO.getKey());

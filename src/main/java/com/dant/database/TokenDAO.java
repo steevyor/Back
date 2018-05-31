@@ -52,13 +52,16 @@ public class TokenDAO implements DAO<Token>{
     }
 
 
-    public Token getByKey(String key) throws SQLException {
+    public Token getByKey(String key) throws SQLException, NullPointerException {
+        System.out.println("GETBYKEY"+key);
         ResultSet result = null;
         String timer = null;
         String pseudo = null;
         try (Statement st = connection.createStatement()) {
-            result = st.executeQuery("SELECT * FROM token WHERE tokenKey =\'" + key + "\';");
+            System.out.println("GETBYKEY");
+            result = st.executeQuery("SELECT * FROM token WHERE tokenKey =\'"+key +"\';");
             if (result.next()) {
+                System.out.println("NEXT");
                 //pseudo = result.getString("userPseudp");
                 key = result.getString("tokenKey");
                 Print.p("Token.getByKey : key : "+key);
@@ -67,9 +70,11 @@ public class TokenDAO implements DAO<Token>{
                 return new Token(key, timer);
             }
             else{
+                System.out.println("NullPointerException");
                 throw new NullPointerException();
             }
         } catch (SQLException e) {
+            System.out.println("SQLException");
             e.printStackTrace();
             throw new SQLException();
         }
