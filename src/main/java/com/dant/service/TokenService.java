@@ -31,7 +31,7 @@ public class TokenService {
     public Token save(Token token, String userPseudo) throws SQLException{
         System.out.println("TokenService.save : saving token ("+token.getTokenKey() +"; " +token.getTimer() +")");
         dao.save(token, userPseudo);
+        System.out.println("TokenService.save : token successfully saved, returning token");
         return token;
     }
-
 }

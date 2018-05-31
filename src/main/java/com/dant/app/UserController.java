@@ -53,6 +53,7 @@ public class UserController {
                 String json = null;
                 HashMap map = new HashMap();
                 tokenService.updateTokenTimer(tokenDTO);
+                tokenService.save(new Token(tokenDTO.getKey(), tokenDTO.getCurrentTime()), userDTO.getPseudo());
                 map.put("token", (tokenDTO));
                 json = gson.toJson(map);
                 Response.status(Response.Status.ACCEPTED);
@@ -93,6 +94,8 @@ public class UserController {
                     json = gson.toJson(map);
                     System.out.println("UserControler.authenticate : json successfully created ! ");
                     System.out.println(json);
+                    System.out.println("UserControler.authenticate : saving Token");
+                    tokenService.save(token, dto.getPseudo());
                 }
             } catch (ForbiddenException e) {
                 System.out.println(e);

@@ -21,11 +21,14 @@ public class TokenDAO implements DAO<Token>{
     }
 
     public void save(Token object, String userPseudo) {
+        System.out.println("TokenDAO.save : creating statement");
         try (Statement st = connection.createStatement()) {
+            System.out.println("TokenDAO.save : preparing statement");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO token (userPseudo, tokenKey, timer) VALUES(?, ?, ?) ");
             preparedStatement.setString(1, userPseudo); //recup pseudo
             preparedStatement.setString(2, object.getTokenKey());// recup token
             preparedStatement.setString(3, object.getTimer());
+            System.out.println("TokenDAO.save : saving token");
             preparedStatement.executeUpdate();
         }catch (SQLException e) {
             throw new InternalServerException(e);
