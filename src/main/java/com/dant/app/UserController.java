@@ -83,6 +83,7 @@ public class UserController {
                     HashMap map = new HashMap();
                     System.out.println("UserControler.authenticate : creating token now ");
                     Token token = new Token();
+
                     System.out.println("UserControler.authenticate : token successfully created !");
                     list.add(dto);
                     list.add(token);

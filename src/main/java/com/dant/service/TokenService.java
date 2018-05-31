@@ -3,6 +3,7 @@ package com.dant.service;
 import com.dant.database.TokenDAO;
 import com.dant.entity.Token;
 import com.dant.entity.dto.TokenDTO;
+import com.dant.entity.dto.UserDTO;
 
 import java.sql.SQLException;
 
@@ -25,6 +26,12 @@ public class TokenService {
         System.out.println("TokenService.updateTokenTimer : new timer value = "+dto.getCurrentTime());
         System.out.println("TokenService.updateTokenTimer : Launching DAO.update");
         dao.update(new Token(dto.getKey(), dto.getCurrentTime()));
+    }
+
+    public Token save(Token token, String userPseudo) throws SQLException{
+        System.out.println("TokenService.save : saving token ("+token.getTokenKey() +"; " +token.getTimer() +")");
+        dao.save(token, userPseudo);
+        return token;
     }
 
 }
