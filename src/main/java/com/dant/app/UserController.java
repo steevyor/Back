@@ -1,5 +1,6 @@
 package com.dant.app;
 
+import com.dant.Print;
 import com.dant.entity.Token;
 import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
@@ -92,7 +93,6 @@ public class UserController {
                     System.out.println("UserControler.authenticate : token successfully created !");
                     list.add(dto);
                     list.add(token);
-                    map.put("user", dto);
                     map.put("token", tokenDTO);
                     System.out.println("UserControler.authenticate : adding data to json ");
                     json = gson.toJson(map);
@@ -210,11 +210,17 @@ public class UserController {
             System.out.println("UserControler.sendFriendsPositions : fields are not blank");
             String json = null;
             try {
-                System.out.println("UserControler.sendFriendsPositions : sending now");
-                System.out.println("UserControler.sendFriendsPositions : adding data to json ");
-                json = gson.toJson(userService.sendFriendsPositionList(user));
-                System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
-                System.out.println(json);
+                if(tokenService.canUseService(token)) {
+                    System.out.println("UserControler.sendFriendsPositions : can use service sending now");
+                    System.out.println("UserControler.sendFriendsPositions : adding data to json ");
+                    json = gson.toJson(userService.sendFriendsPositionList(user));
+                    Print.p(json);
+                    System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
+                    System.out.println(json);
+                    System.out.println("UserControler.sendFriendsPositions : now returning response to friendList request ");
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+                }
             } catch (ForbiddenException e) {
                 System.out.println(e);
                 return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -222,9 +228,7 @@ public class UserController {
                 System.out.println(f);
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            System.out.println("UserControler.sendFriendsPositions : now returning response to friendList request ");
-            return Response.ok(json, MediaType.APPLICATION_JSON).build();
-
+            return Response.status(Response.Status.NO_CONTENT).build();
         } else {
             System.out.println("NO_CONTENT Exception");
             return Response.status(Response.Status.NO_CONTENT).build();

@@ -68,9 +68,7 @@ public class UserService {
     }
 
     public List<User> sendFriendsPositionList(UserDTO dto) throws SQLException {
-        if(this.tokendao.get(dto.pseudo).equals(dto.token)){
             return this.userdao.getFriendsPosition(dto.pseudo);
-        } else throw new ForbiddenException();
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO user) throws SQLException {

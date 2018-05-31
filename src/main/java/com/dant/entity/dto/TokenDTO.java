@@ -28,6 +28,8 @@ public class TokenDTO {
         this.pseudo = pseudo;
     }
 
+
+
     public TokenDTO(Token t){
         this.key = t.getTokenKey();
         this.currentTime = t.getTimer();

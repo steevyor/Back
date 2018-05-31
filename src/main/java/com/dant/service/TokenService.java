@@ -75,12 +75,12 @@ public class TokenService {
     public void deleteToken(TokenDTO tokenDTO) throws SQLException {
         System.out.println("TokenService.deleteToken : deleting token " +tokenDTO.getKey());
         try{
-            System.out.println("Par key");
+            System.out.println("Par pseudo");
             dao.deleteByPseudo(tokenDTO.getPseudo());
 
         }catch(SQLException e){
             try{
-                System.out.println("Par pseudo");
+                System.out.println("Par key");
                 dao.deleteByKey(tokenDTO.getKey());
 
             }catch(SQLException f){
