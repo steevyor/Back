@@ -61,8 +61,8 @@ public class TokenDAO implements DAO<Token>{
                 key = result.getString("tokenKey");
                 Print.p("Token.getByKey : key : "+key);
                 timer = result.getString("timer");
-                Print.p(timer);
-                return new Token("Token.getByKey : timer :"+timer);
+                Print.p("Token.getByKey : returning Token with key = "+key +"; and timer = "+timer);
+                return new Token(key, timer);
             }
             else{
                 throw new NullPointerException();
