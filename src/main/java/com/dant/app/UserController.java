@@ -96,7 +96,14 @@ public class UserController {
                     System.out.println("UserControler.authenticate : json successfully created ! ");
                     System.out.println(json);
                     System.out.println("UserControler.authenticate : saving Token");
-                    tokenService.save(tokenDTO, dto.getPseudo());
+                    if(tokenService.doesTokenExists(tokenDTO)){
+                        if(tokenService.canUseService(tokenDTO)){
+                            tokenService.updateTokenTimer(tokenDTO);
+                        }else {
+                            tokenService.deleteToken(tokenDTO);
+                            tokenService.save(tokenDTO, dto.getPseudo());
+                        }
+                    }else tokenService.save(tokenDTO, dto.getPseudo());
                 }
             } catch (ForbiddenException e) {
                 System.out.println(e);
