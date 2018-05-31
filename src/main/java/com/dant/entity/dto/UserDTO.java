@@ -34,6 +34,13 @@ public class UserDTO {
         this.token = "test";
     }
 
+
+    public UserDTO(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+
+
     public String getEmail() {
         return email;
     }

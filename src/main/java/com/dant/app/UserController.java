@@ -7,6 +7,7 @@ import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.request.InvitationRequest;
 import com.dant.request.SaveRequest;
+import com.dant.request.UserRequest;
 import com.dant.service.TokenService;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
@@ -185,16 +186,19 @@ public class UserController {
 
     @POST
     @Path("/friendPositions")
-    public Response sendFriendsPositionsList(UserDTO dto) {
+    public Response sendFriendsPositionsList(UserRequest request) {
         System.out.println("UserControler.sendFriendsPositions :");
-        System.out.println(dto.pseudo +" :" +dto.token);
-        if (isNotBlank(dto.pseudo) && isNotBlank(dto.token)) {
+        UserDTO user = request.getUserDTO();
+        TokenDTO token = request.getTokenDTO();
+        System.out.println(user.getPseudo() +" :" +token.getKey());
+        System.out.println(request.getPseudo() +" :" +request.getTokenKey());
+        if (isNotBlank(user.getPseudo()) && isNotBlank(token.getKey()) ){
             System.out.println("UserControler.sendFriendsPositions : fields are not blank");
             String json = null;
             try {
                 System.out.println("UserControler.sendFriendsPositions : sending now");
                 System.out.println("UserControler.sendFriendsPositions : adding data to json ");
-                json = gson.toJson(userService.sendFriendsPositionList(dto));
+                json = gson.toJson(userService.sendFriendsPositionList(user));
                 System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
                 System.out.println(json);
             } catch (ForbiddenException e) {
