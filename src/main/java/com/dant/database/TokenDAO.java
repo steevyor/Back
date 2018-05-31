@@ -39,7 +39,7 @@ public class TokenDAO implements DAO<Token>{
     public Token get(String pseudo) throws SQLException {
 
         try (Statement st = connection.createStatement()) {
-            ResultSet result = st.executeQuery("SELECT tokenKey, timer FROM token WHERE userPseudo = '" +pseudo + "' ;");
+            ResultSet result = st.executeQuery("SELECT tokenKey, timer FROM token WHERE userPseudo =\'" +pseudo +"\';");
             if(result.next()){
                 String timer = result.getString("timer");
                 String key = result.getString("tokenKey");
@@ -81,24 +81,37 @@ public class TokenDAO implements DAO<Token>{
     }
 
     @Override
-    public void delete(Token object) {
+    public void delete(Token object) throws SQLException{
         try(Statement st = connection.createStatement()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE tokenKey = (?) ;");
             preparedStatement.setString(1, object.getTokenKey());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException();
         }
     }
 
-    public void deleteByKey(String key) {
+    public void deleteByKey(String key) throws SQLException{
         try(Statement st = connection.createStatement()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE tokenKey = (?) ;");
             preparedStatement.setString(1, key);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException();
         }
+    }
+
+    public void deleteByPseudo(String pseudo) throws SQLException {
+        try(Statement st = connection.createStatement()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM token WHERE userPseudo = (?) ;");
+            preparedStatement.setString(1, pseudo);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+    }
     }
 
     @Override

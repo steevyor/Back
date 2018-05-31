@@ -22,9 +22,16 @@ public class TokenDTO {
         this.currentTime = currentTime;
     }
 
+    public TokenDTO(String key, String currentTime, String pseudo) {
+        this.key = key;
+        this.currentTime = currentTime;
+        this.pseudo = pseudo;
+    }
+
     public TokenDTO(Token t){
         this.key = t.getTokenKey();
         this.currentTime = t.getTimer();
+        this.pseudo = pseudo;
     }
 
 

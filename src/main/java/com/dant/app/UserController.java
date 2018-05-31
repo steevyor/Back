@@ -84,8 +84,10 @@ public class UserController {
                     List list = new ArrayList();
                     HashMap map = new HashMap();
                     System.out.println("UserControler.authenticate : creating token now ");
-                    Token token = new Token(dto.getPseudo());
-                    TokenDTO tokenDTO = new TokenDTO(token.getTokenKey(), token.getTimer());
+                    Token token = new Token();
+                    TokenDTO tokenDTO = new TokenDTO(token.getTokenKey(), token.getTimer(), dto.getPseudo());
+                    System.out.println(dto.pseudo);
+                    System.out.println(tokenDTO.getPseudo());
 
                     System.out.println("UserControler.authenticate : token successfully created !");
                     list.add(dto);
@@ -97,14 +99,17 @@ public class UserController {
                     System.out.println("UserControler.authenticate : json successfully created ! ");
                     System.out.println(json);
                     System.out.println("UserControler.authenticate : saving Token");
-                    if(tokenService.doesTokenExists(tokenDTO)){
-                        if(tokenService.canUseService(tokenDTO)){
-                            tokenService.updateTokenTimer(tokenDTO);
-                        }else {
-                            tokenService.deleteToken(tokenDTO);
-                            tokenService.save(tokenDTO, dto.getPseudo());
-                        }
-                    }else tokenService.save(tokenDTO, dto.getPseudo());
+                    System.out.println("1//////////////////////PSEUDO;KEY : " + tokenDTO.getPseudo() + ";" + tokenDTO.getKey());
+                    if (tokenService.doesTokenExists(tokenDTO)) {
+                        System.out.print("Suppression et enregistrement");
+                        tokenService.deleteToken(tokenDTO);
+                        tokenService.save(tokenDTO, dto.getPseudo());
+
+                    } else {
+                        System.out.print("Enregistrement");
+
+                        tokenService.save(tokenDTO, dto.getPseudo());
+                    }
                 }
             } catch (ForbiddenException e) {
                 System.out.println(e);

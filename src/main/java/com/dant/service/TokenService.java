@@ -14,11 +14,17 @@ public class TokenService {
 
     public boolean canUseService(TokenDTO dto) throws SQLException{
         System.out.println("TokenService.canUseService : getting token Object by DTOKey");
-        Token currentInDataBaseToken = dao.getByKey(dto.getKey());
-        System.out.println("TokenService.canUseService : recuperated Token :"+currentInDataBaseToken.getTokenKey());
-        System.out.println("TokenService.canUseService : timer : "+currentInDataBaseToken.getTimer());
-        System.out.println("TokenService.canUseService : "+currentInDataBaseToken.isTimerGapValid());
-        return currentInDataBaseToken.isTimerGapValid();
+        System.out.println(dto.getKey());
+        try{
+            Token currentInDataBaseToken = dao.getByKey(dto.getKey());
+            System.out.println("TokenService.canUseService : recuperated Token :"+currentInDataBaseToken.getTokenKey());
+            System.out.println("TokenService.canUseService : timer : "+currentInDataBaseToken.getTimer());
+            System.out.println("TokenService.canUseService : "+currentInDataBaseToken.isTimerGapValid());
+            return currentInDataBaseToken.isTimerGapValid();
+        }
+        catch (NullPointerException e){
+            return false;
+        }
     }
 
     public void updateTokenTimer(TokenDTO dto) throws SQLException{
@@ -49,6 +55,10 @@ public class TokenService {
         System.out.println("TokenService.doesTokenExists : testing if tokens already exists");
         System.out.println(tokenDTO.getPseudo());
         try{
+            if(dao.get(tokenDTO.getPseudo()) != null){
+                System.out.println("TokenService.doesTokenExists : TRUE ( found by pseudo ) ");
+                return true;
+            }
             if (dao.getByKey(tokenDTO.getKey()) != null) {
                 System.out.println("TokenService.doesTokenExists : TRUE ( found by key ) ");
                 return true;
@@ -64,7 +74,20 @@ public class TokenService {
     }
     public void deleteToken(TokenDTO tokenDTO) throws SQLException {
         System.out.println("TokenService.deleteToken : deleting token " +tokenDTO.getKey());
-        dao.deleteByKey(tokenDTO.getKey());
+        try{
+            System.out.println("Par key");
+            dao.deleteByPseudo(tokenDTO.getPseudo());
+
+        }catch(SQLException e){
+            try{
+                System.out.println("Par pseudo");
+                dao.deleteByKey(tokenDTO.getKey());
+
+            }catch(SQLException f){
+                throw new SQLException();
+            }
+        }
+
         System.out.println("TokenService.deleteToken : token deleted");
     }
 }
