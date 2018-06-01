@@ -294,6 +294,7 @@ public class UserController {
         TokenDTO tokenDTO = request.getTokenDTO();
         String key = request.getRequestedPseudo();
         String userPseudo = request.getUserPseudo();
+        //FriendshipDTO friendshipDTO = new FriendshipDAO().delete(this.key,this.userPseudo);
         if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
             String json = null;
             try {
@@ -321,9 +322,9 @@ public class UserController {
     @Path("/deleteFriendShip")
     public Response deleteFriendShip (ResearchFriendRequest request){
         TokenDTO tokenDTO = request.getTokenDTO();
-        String key = request.getRequestedPseudo();
+        String userPseudo = request.getRequestedPseudo();
 
-        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
+        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(userPseudo)){
             String json = null ;
             try{
                 if (tokenService.canUseService(tokenDTO)){
