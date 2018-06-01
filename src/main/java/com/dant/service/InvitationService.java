@@ -4,6 +4,10 @@ import com.dant.database.FriendshipDAO;
 import com.dant.database.InvitationDAO;
 import com.dant.entity.Invitation;
 import com.dant.entity.dto.InvitationDTO;
+import com.dant.entity.dto.UserDTO;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class InvitationService {
     InvitationDAO daoinvitation = new InvitationDAO();
@@ -20,6 +24,10 @@ public class InvitationService {
         daoinvitation.delete(invit);
 
         return invit;
+    }
+
+    public List<InvitationDTO> getAllInvitations(UserDTO userDTO) throws SQLException{
+
     }
 
 

@@ -35,6 +35,7 @@ public class UserController {
     private final UserService userService = new UserService();
     private final TokenService tokenService = new TokenService();
 
+
     @POST
     @Path("/tests")
     public Response create(SaveRequest saveRequest) {
@@ -249,6 +250,23 @@ public class UserController {
         } else {
             System.out.println("NO_CONTENT Exception");
             return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
+
+    @POST
+    @Path("/invitationList")
+    public Response sendInvitationList(InvitationListRequest invitationListRequest){
+        String userPseudo = invitationListRequest.getUserDTO().getPseudo();
+        TokenDTO tokenDTO = invitationListRequest.getTokenDTO();
+        if(isNotBlank(userPseudo) && isNotBlank(tokenDTO.getKey())){
+            String json = null;
+            try {
+                if(tokenService.canUseService(tokenDTO)){
+                    invitationService
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -92,10 +92,23 @@ public class InvitationDAO implements  DAO<Invitation>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return invitations;
-
     }
 
+    public List<Invitation> getAll(String userPseudo) {
+        ArrayList<Invitation> invitations = new ArrayList<Invitation>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT * FROM invitation WHERE receiver = \'" +userPseudo +"\' ;");
+            while(result.next()){
+                String receiver = result.getString("receiver");
+                String emitter = result.getString("emitter");
+                invitations.add(new Invitation(receiver, emitter));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return invitations;
+    }
 
 }
