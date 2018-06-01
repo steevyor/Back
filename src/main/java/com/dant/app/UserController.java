@@ -1,11 +1,10 @@
 package com.dant.app;
 
 import com.dant.Print;
+import com.dant.database.FriendshipDAO;
+import com.dant.entity.Friendship;
 import com.dant.entity.Token;
-import com.dant.entity.dto.CoordinateDTO;
-import com.dant.entity.dto.InvitationDTO;
-import com.dant.entity.dto.TokenDTO;
-import com.dant.entity.dto.UserDTO;
+import com.dant.entity.dto.*;
 import com.dant.exception.InternalServerException;
 import com.dant.request.*;
 import com.dant.service.TokenService;
@@ -323,16 +322,14 @@ public class UserController {
     public Response deleteFriendShip (ResearchFriendRequest request){
         TokenDTO tokenDTO = request.getTokenDTO();
         String key = request.getRequestedPseudo();
-        String userPseudo = request.getUserPseudo();
+
         if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
             String json = null ;
             try{
                 if (tokenService.canUseService(tokenDTO)){
-                    List list = new ArrayList(userService.findCorrespondingUsers(key));
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO,userPseudo);
-                    map.put("utilisateur",list);
+                    tokenService.save(tokenDTO,tokenDTO.getPseudo());
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
