@@ -16,6 +16,7 @@ public class TokenService {
         System.out.println("TokenService.canUseService : getting token Object by DTOKey");
         System.out.println(dto.getKey());
         try{
+            System.out.println("TokenService.canUseService : ");
             Token currentInDataBaseToken = dao.getByKey(dto.getKey());
             System.out.println("TokenService.canUseService : recuperated Token :"+currentInDataBaseToken.getTokenKey());
             System.out.println("TokenService.canUseService : timer : "+currentInDataBaseToken.getTimer());

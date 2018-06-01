@@ -77,10 +77,7 @@ public class UserService {
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {
         Print.p("UserService.sendInvitation : Invitation(emiter, recepter) = "+invitationDto.getEmitterId() +" ; "+invitationDto.getRecepterId());
         Print.p("UserService.sendInvitation : Token(pseudo, key, timer ) = "+tokenDTO.getPseudo()+" ; "+tokenDTO.getKey() +" ; "+tokenDTO.getCurrentTime());
-        if(this.tokendao.get(invitationDto.getEmitterId()).equals(tokenDTO.getPseudo())){
-            Invitation i = new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId());
-            this.invitationdao.save(i);
-        } else throw new ForbiddenException();
+            this.invitationdao.save(new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId()));
     }
 
     public void updateCoord(UserDTO user, CoordinateDTO coord) throws SQLException {
