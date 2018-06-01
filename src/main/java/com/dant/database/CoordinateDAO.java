@@ -51,6 +51,20 @@ public class CoordinateDAO implements DAO<Coordinate> {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public Coordinate update(Coordinate object) {
         Coordinate coord = new Coordinate();

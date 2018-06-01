@@ -317,4 +317,32 @@ public class UserController {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
     }
+
+    @POST
+    @Path("/deleteFriendShip")
+    public Response deleteFriendShip (ResearchFriendRequest request){
+        TokenDTO tokenDTO = request.getTokenDTO();
+        String key = request.getRequestedPseudo();
+        String userPseudo = request.getUserPseudo();
+        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
+            String json = null ;
+            try{
+                if (tokenService.canUseService(tokenDTO)){
+                    List list = new ArrayList(userService.findCorrespondingUsers(key));
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO,userPseudo);
+                    map.put("utilisateur",list);
+                    map.put("token", tokenDTO);
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }else{
+                    return  Response.status(Response.Status.FORBIDDEN).build();                }
+            } catch (SQLException e) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else{
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
 }
