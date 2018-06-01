@@ -164,38 +164,6 @@ public class UserController {
         }
     }
 
-    @POST
-    @Path("/friendList")
-    public Response sendFriendList(UserRequest userRequest ) {
-        System.out.println("UserControler.sendFriendlist :");
-        UserDTO user = userRequest.getUserDTO();
-        TokenDTO token = userRequest.getTokenDTO();
-        System.out.println(user.getPseudo() +" :" +token.getKey());
-        if (isNotBlank(user.getPseudo()) && isNotBlank(token.getKey())) {
-            System.out.println("UserControler.sendFriendlist : fields are not blank");
-            String json = null;
-            try {
-                System.out.println("UserControler.sendFriendlist : sending now");
-                System.out.println("UserControler.sendFriendlist : adding data to json ");
-                json = gson.toJson(userService.sendFriendList(user));
-                System.out.println("UserControler.sendFriendlist : json successfully created ! ");
-                System.out.println(json);
-            } catch (ForbiddenException e) {
-                System.out.println(e);
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            } catch (SQLException f) {
-                System.out.println(f);
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-            System.out.println("UserControler.sendFriendlist : now returning response to friendList request ");
-            return Response.ok(json, MediaType.APPLICATION_JSON).build();
-
-        } else {
-            System.out.println("NO_CONTENT Exception");
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
-    }
-
 
     @POST
     @Path("/friends")
