@@ -61,6 +61,7 @@ public class TokenDAO implements DAO<Token>{
         try (Statement st = connection.createStatement()) {
             System.out.println("GETBYKEY");
             result = st.executeQuery("SELECT * FROM token WHERE tokenKey =\'"+key +"\';");
+            System.out.println(result.toString());
             if (result.next()) {
                 System.out.println("NEXT");
                 //pseudo = result.getString("userPseudp");
