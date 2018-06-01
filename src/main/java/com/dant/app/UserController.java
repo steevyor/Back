@@ -241,6 +241,7 @@ public class UserController {
     public Response sendInvitation(InvitationRequest invitationRequest) {
         InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
         TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
         System.out.println("UserControler.sendInvitation :");
         System.out.println(invitationDTO.getEmitterId() +" :" + tokenDTO.getKey());
         if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
@@ -253,6 +254,7 @@ public class UserController {
                     System.out.println("UserControler.sendInvitation : update successfully done ! ");
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
                     map.put("token", (tokenDTO));
                     json = gson.toJson(map);
                     Response.status(Response.Status.ACCEPTED);
