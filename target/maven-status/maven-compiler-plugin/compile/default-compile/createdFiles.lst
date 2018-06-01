@@ -19,6 +19,7 @@ com\dant\entity\Account.class
 com\dant\request\SaveRequest.class
 com\dant\app\Connection.class
 com\dant\entity\dto\CoordinateDTO.class
+com\dant\request\ResearchRequest.class
 com\dant\filter\GsonProvider.class
 com\dant\database\Database.class
 com\dant\entity\dto\TokenDTO.class

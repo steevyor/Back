@@ -201,24 +201,27 @@ public class UserController {
     @Path("/friends")
     public Response sendFriends(UserRequest request) {
         System.out.println("UserControler.sendFriendsPositions :");
-        UserDTO user = request.getUserDTO();
-        TokenDTO token = request.getTokenDTO();
-        System.out.println(user.getPseudo() +" :" +token.getKey());
+        UserDTO userDTO = request.getUserDTO();
+        TokenDTO tokenDTO = request.getTokenDTO();
+        System.out.println(userDTO.getPseudo() +" :" +tokenDTO.getKey());
         System.out.println(request.getPseudo() +" :" +request.getTokenKey());
-        if (isNotBlank(user.getPseudo()) && isNotBlank(token.getKey()) ){
+        if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey()) ){
             System.out.println("UserControler.sendFriendsPositions : fields are not blank");
             String json = null;
             try {
-                if(tokenService.canUseService(token)) {
+                if(tokenService.canUseService(tokenDTO)) {
                     System.out.println("UserControler.sendFriendsPositions : can use service sending now");
                     System.out.println("UserControler.sendFriendsPositions : adding data to json ");
                     HashMap map = new HashMap();
-                    map.put("friends", userService.sendFriendsPositionList(user));
+                    map.put("token", tokenDTO.getKey());
+                    map.put("friends", userService.sendFriendsPositionList(userDTO));
                     json = gson.toJson(map);
                     Print.p(json);
                     System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
                     System.out.println(json);
                     System.out.println("UserControler.sendFriendsPositions : now returning response to friendList request ");
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, userDTO.getPseudo());
                     Response.status(Response.Status.ACCEPTED);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
@@ -258,7 +261,7 @@ public class UserController {
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
-                    map.put("token", (tokenDTO));
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     Response.status(Response.Status.ACCEPTED);
                 }else{

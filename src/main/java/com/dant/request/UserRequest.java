@@ -6,8 +6,8 @@ import com.dant.entity.dto.UserDTO;
 
 public class UserRequest {
 
-        String pseudo;
-        String tokenKey;
+        private String pseudo;
+        private String tokenKey;
 
         public String getPseudo() {
             return pseudo;
