@@ -83,10 +83,6 @@ public class UserDAO implements DAO<User> {
         return object;
     }
 
-    public void updateCoordinates(User objet){
-
-    }
-
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<User>();
@@ -129,11 +125,17 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public void updateCoordinates(Coordinate object, String key){
+    public void updateCoordinates(Coordinate object, String key) throws SQLException {
+        System.out.println("UserDAO.updateCoord : ");
+        System.out.println("UserDAO.updateCoord : "+object.getXCoordinate());
+        System.out.println("UserDAO.updateCoord : "+object.getYCoordinate());
+
         try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE user SET xCoordinates =" +object.xCoordinate +", yCoordinates =" +object.yCoordinate +" FROM user WHERE pseudo =" +key +";");
+            st.executeUpdate("UPDATE user SET xCoordinates = \'" +object.getXCoordinate() +"\', yCoordinates = \'" +object.getYCoordinate() + "\' where pseudo = '" +key + "\' ;");
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException();
+
         }
     }
 

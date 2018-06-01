@@ -4,8 +4,10 @@ import com.dant.database.DAO;
 import com.dant.database.InvitationDAO;
 import com.dant.database.TokenDAO;
 import com.dant.database.UserDAO;
+import com.dant.entity.Coordinate;
 import com.dant.entity.Invitation;
 import com.dant.entity.User;
+import com.dant.entity.dto.CoordinateDTO;
 import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
@@ -78,5 +80,11 @@ public class UserService {
         } else throw new ForbiddenException();
     }
 
+    public void updateCoord(UserDTO user, CoordinateDTO coord) throws SQLException {
+            userdao.updateCoordinates(new Coordinate(coord.getxCoordinate(), coord.getyCoordinate()), user.getPseudo());
+            System.out.println("User Service.updtaCoord : update ok");
+
+
+    }
 
 }

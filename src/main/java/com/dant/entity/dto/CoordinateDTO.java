@@ -13,4 +13,12 @@ public class CoordinateDTO {
         this.yCoordinate = y;
         this.xCoordinate = x;
     }
+
+    public double getxCoordinate() {
+        return xCoordinate;
+    }
+
+    public double getyCoordinate() {
+        return yCoordinate;
+    }
 }

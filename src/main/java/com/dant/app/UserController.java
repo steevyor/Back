@@ -2,11 +2,13 @@ package com.dant.app;
 
 import com.dant.Print;
 import com.dant.entity.Token;
+import com.dant.entity.dto.CoordinateDTO;
 import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.request.InvitationRequest;
+import com.dant.request.PositionRequest;
 import com.dant.request.SaveRequest;
 import com.dant.request.UserRequest;
 import com.dant.service.TokenService;
@@ -213,12 +215,16 @@ public class UserController {
                 if(tokenService.canUseService(token)) {
                     System.out.println("UserControler.sendFriendsPositions : can use service sending now");
                     System.out.println("UserControler.sendFriendsPositions : adding data to json ");
-                    json = gson.toJson(userService.sendFriendsPositionList(user));
+                    HashMap map = new HashMap();
+                    map.put("friends", userService.sendFriendsPositionList(user));
+                    json = gson.toJson(map);
                     Print.p(json);
                     System.out.println("UserControler.sendFriendsPositions : json successfully created ! ");
                     System.out.println(json);
                     System.out.println("UserControler.sendFriendsPositions : now returning response to friendList request ");
+                    Response.status(Response.Status.ACCEPTED);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
 
                 }
             } catch (ForbiddenException e) {
@@ -276,4 +282,36 @@ public class UserController {
         }
     }
 
+    @POST
+    @Path("/updateUserCoordinates")
+    public Response updateUserPosition(PositionRequest pos) {
+        UserDTO userdto = pos.getUserDTO();
+        CoordinateDTO coordDTO = pos.getCoordinateDTO();
+        TokenDTO tokenDTO = pos.getTokenDTO();
+        System.out.println("UserControler.updateUserPosition:");
+        System.out.println(userdto.getPseudo() +" :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : "+tokenDTO.getKey());
+        if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())){
+            System.out.println("UserControler.updateUserPosition: : fields are not blank");
+            String json = null;
+            try {
+                if(tokenService.canUseService(tokenDTO)) {
+                    System.out.println("UserControler.updateUserPosition: : can use service ok");
+                    userService.updateCoord(userdto, coordDTO);
+                    System.out.println("UserControler.sendFriendsPositions : update successfully done ! ");
+                    return Response.status(Response.Status.ACCEPTED).build();
+
+                }
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
 }
