@@ -37,7 +37,7 @@ public class TokenDAO implements DAO<Token>{
 
     @Override
     public Token get(String pseudo) throws SQLException {
-
+        Print.p("TokenDAO.get : getting Token with pseudo = "+pseudo);
         try (Statement st = connection.createStatement()) {
             ResultSet result = st.executeQuery("SELECT tokenKey, timer FROM token WHERE userPseudo =\'" +pseudo +"\';");
             if(result.next()){
@@ -46,6 +46,7 @@ public class TokenDAO implements DAO<Token>{
                 return new Token(key, timer);
             } else return null;
         } catch (SQLException e) {
+            Print.p("TokenDAO.get : SQL Exception");
             e.printStackTrace();
             return null;
         }

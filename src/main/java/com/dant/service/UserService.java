@@ -1,5 +1,6 @@
 package com.dant.service;
 
+import com.dant.Print;
 import com.dant.database.DAO;
 import com.dant.database.InvitationDAO;
 import com.dant.database.TokenDAO;
@@ -73,8 +74,10 @@ public class UserService {
             return this.userdao.getFriendsPosition(dto.pseudo);
     }
 
-    public void sendInvitation(InvitationDTO invitationDto, TokenDTO user) throws SQLException {
-        if(this.tokendao.get(invitationDto.getEmitterId()).equals(user.getKey())){
+    public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {
+        Print.p("UserService.sendInvitation : Invitation(emiter, recepter) = "+invitationDto.getEmitterId() +" ; "+invitationDto.getRecepterId());
+        Print.p("UserService.sendInvitation : Token(pseudo, key, timer ) = "+tokenDTO.getPseudo()+" ; "+tokenDTO.getKey() +" ; "+tokenDTO.getCurrentTime());
+        if(this.tokendao.get(invitationDto.getEmitterId()).equals(tokenDTO.getPseudo())){
             Invitation i = new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId());
             this.invitationdao.save(i);
         } else throw new ForbiddenException();

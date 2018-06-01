@@ -1,5 +1,6 @@
 package com.dant.database;
 
+import com.dant.Print;
 import com.dant.entity.Invitation;
 import com.dant.exception.InternalServerException;
 
@@ -18,6 +19,7 @@ public class InvitationDAO implements  DAO<Invitation>{
 
     @Override
     public void save(Invitation object) {
+        Print.p("InvitationDAO.save : trying to save invitation(emitter, receiver) = "+object.getEmitterId() +" ; "+object.getRecepterId());
             try (Statement st = connection.createStatement()) {
                 //Relation dans un sens
                 preparedStatement = connection.prepareStatement("insert into invitation values(?, ?);");
