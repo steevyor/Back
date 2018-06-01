@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.List;
 
 
-public class TokenDAO implements DAO<Token>{
+public class    TokenDAO implements DAO<Token>{
 
     private final Connection connection;
     public TokenDAO(){ this.connection=Database.connect();}
