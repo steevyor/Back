@@ -9,7 +9,7 @@ public class PositionRequest {
     String pseudo;
     String tokenKey;
     String xCoordinates;
-    String  yCoordinates;
+    String yCoordinates;
 
     public String getPseudo() {
         return pseudo;

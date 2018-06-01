@@ -297,8 +297,12 @@ public class UserController {
                     System.out.println("UserControler.updateUserPosition: : can use service ok");
                     userService.updateCoord(userdto, coordDTO);
                     System.out.println("UserControler.sendFriendsPositions : update successfully done ! ");
-                    return Response.status(Response.Status.ACCEPTED).build();
-
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, userdto.getPseudo());
+                    HashMap map = new HashMap();
+                    map.put("token", tokenDTO);
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 }
             } catch (ForbiddenException e) {
                 System.out.println(e);
