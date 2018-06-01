@@ -181,8 +181,21 @@ public class UserDAO implements DAO<User> {
             e.printStackTrace();
             throw new SQLException();
         }
-
         return users;
+    }
+
+    public List<String> getCorrespondingUsers(String key) throws SQLException {
+        List<String> list = new ArrayList();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT pseudo FROM user WHERE pseudo LIKE \'" +key +"%\';");
+            while(result.next()) {
+                list.add(result.getString("pseudo"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return list;
     }
 
 

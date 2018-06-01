@@ -83,8 +83,10 @@ public class UserService {
     public void updateCoord(UserDTO user, CoordinateDTO coord) throws SQLException {
             userdao.updateCoordinates(new Coordinate(coord.getxCoordinate(), coord.getyCoordinate()), user.getPseudo());
             System.out.println("User Service.updtaCoord : update ok");
+    }
 
-
+    public List<String> findCorrespondingUsers(String s) throws  SQLException {
+        return userdao.getCorrespondingUsers(s);
     }
 
 }

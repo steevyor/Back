@@ -6,12 +6,12 @@ public class ResearchFriendRequest {
 
     private String tokenKey;
     private String requestedPseudo;
-    private String pseudo;
+    private String userPseudo;
 
-    public ResearchFriendRequest(String tokenKey, String requestedPseudo, String pseudo){
+    public ResearchFriendRequest(String tokenKey, String requestedPseudo, String userPseudo){
         this.requestedPseudo = requestedPseudo;
         this.tokenKey = tokenKey;
-        this.pseudo = pseudo;
+        this.userPseudo = userPseudo;
     }
 
     public TokenDTO getTokenDTO(){
@@ -19,5 +19,8 @@ public class ResearchFriendRequest {
     }
     public String getRequestedPseudo(){
         return this.requestedPseudo;
+    }
+    public String getUserPseudo(){
+        return this.userPseudo;
     }
 }

@@ -1,6 +1,8 @@
+com\dant\request\PositionRequest.class
 com\dant\service\UserService.class
 com\dant\entity\Invitation.class
 com\dant\exception\ForbiddenExceptionMapper.class
+com\dant\request\ResearchFriendRequest.class
 com\dant\entity\dto\InvitationDTO.class
 com\dant\app\App.class
 com\dant\entity\dto\FriendshipDTO.class
