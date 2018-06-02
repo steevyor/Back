@@ -78,7 +78,7 @@ public class InvitationDAO implements  DAO<Invitation>{
     @Override
     public void delete(Invitation object) {
         try {
-            preparedStatement = connection.prepareStatement("DELETE * from invitation where receiver = (?) and emitter = (?);");
+            preparedStatement = connection.prepareStatement("DELETE FROM 'invitation' WHERE 'receiver' = (?) AND 'emitter' = (?);");
             preparedStatement.setString(1, object.getRecepterId());
             preparedStatement.setString(2, object.getRecepterId());
             preparedStatement.executeUpdate();
