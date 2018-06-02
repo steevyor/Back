@@ -214,47 +214,7 @@ public class UserController {
         }
     }
 
-    @POST
-    @Path("/sendInvitation")
-    public Response sendInvitation(InvitationRequest invitationRequest) {
-        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
-        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
-        tokenDTO.setPseudo(invitationDTO.getEmitterId());
-        System.out.println("UserControler.sendInvitation :");
-        System.out.println(invitationDTO.getEmitterId() +" :" + tokenDTO.getKey());
-        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
-            System.out.println("UserControler.sendInvitation : fields are not blank");
-            String json = null;
-            try {
-                if(tokenService.canUseService(tokenDTO)) {
-                    System.out.println("UserControler.sendInvitation : updating ");
-                    userService.sendInvitation(invitationDTO, tokenDTO);
-                    System.out.println("UserControler.sendInvitation : update successfully done ! ");
-                    HashMap map = new HashMap();
-                    tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
-                    map.put("token", tokenDTO.getKey());
-                    json = gson.toJson(map);
-                    Response.status(Response.Status.ACCEPTED);
-                }else{
-                    System.out.println("nucepted");
-                    return Response.status(Response.Status.UNAUTHORIZED).build();
-                }
-            } catch (ForbiddenException e) {
-                System.out.println(e);
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            } catch (SQLException f) {
-                System.out.println(f);
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-            System.out.println("UserControler.sendInvitation : now returning response to sendInvitation request ");
-            return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-        } else {
-            System.out.println("NO_CONTENT Exception");
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
-    }
 
     @POST
     @Path("/invitationList")
@@ -379,5 +339,97 @@ public class UserController {
         }else{
             return Response.status(Response.Status.NO_CONTENT).build();
         }
+    }
+
+    @POST
+    @Path("/sendInvitation")
+    public Response sendInvitation(InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        System.out.println("UserControler.sendInvitation :");
+        System.out.println(invitationDTO.getEmitterId() +" :" + tokenDTO.getKey());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+            System.out.println("UserControler.sendInvitation : fields are not blank");
+            String json = null;
+            try {
+                if(tokenService.canUseService(tokenDTO)) {
+                    System.out.println("UserControler.sendInvitation : updating ");
+                    userService.sendInvitation(invitationDTO, tokenDTO);
+                    System.out.println("UserControler.sendInvitation : update successfully done ! ");
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    map.put("token", tokenDTO.getKey());
+                    json = gson.toJson(map);
+                    Response.status(Response.Status.ACCEPTED);
+                }else{
+                    System.out.println("nucepted");
+                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                }
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            System.out.println("UserControler.sendInvitation : now returning response to sendInvitation request ");
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
+
+    @POST
+    @Path("/refuseInvitation")
+    public Response refuseInvitation (InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+            System.out.println("UserControler.refuseInvitation : fields are not blank");
+            String json = null;
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    userService.refuseInvitation(invitationDTO);
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    map.put("token", tokenDTO.getKey());
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            }catch (SQLException e){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @POST
+    @Path("/acceptInvitation")
+    public Response acceptInvitation (InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+            System.out.println("UserControler.acceptInvitation : fields are not blank");
+            String json = null;
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    userService.acceptInvitation(invitationDTO);
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    map.put("token", tokenDTO.getKey());
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            }catch (SQLException e){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
