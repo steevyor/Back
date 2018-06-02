@@ -44,6 +44,7 @@ public class UserController {
         System.out.println("in tests");
         TokenDTO tokenDTO = saveRequest.getTokenDTO();
         UserDTO userDTO = saveRequest.getUserDTO();
+        tokenDTO.setPseudo(userDTO.getPseudo());
         System.out.println(userDTO.getPseudo());
         String a = saveRequest.getTokenDTO().getKey();
         System.out.println(a);
@@ -174,6 +175,7 @@ public class UserController {
         System.out.println("UserControler.sendFriendsPositions :");
         UserDTO userDTO = request.getUserDTO();
         TokenDTO tokenDTO = request.getTokenDTO();
+        tokenDTO.setPseudo(request.getPseudo());
         System.out.println(userDTO.getPseudo() +" :" +tokenDTO.getKey());
         System.out.println(request.getPseudo() +" :" +request.getTokenKey());
         if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey()) ){
@@ -211,7 +213,6 @@ public class UserController {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
     }
-
 
     @POST
     @Path("/sendInvitation")
@@ -289,6 +290,7 @@ public class UserController {
         UserDTO userdto = pos.getUserDTO();
         CoordinateDTO coordDTO = pos.getCoordinateDTO();
         TokenDTO tokenDTO = pos.getTokenDTO();
+        tokenDTO.setPseudo(userdto.getPseudo());
         System.out.println("UserControler.updateUserPosition:");
         System.out.println(userdto.getPseudo() +" :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : "+tokenDTO.getKey());
         if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())){
@@ -326,6 +328,7 @@ public class UserController {
         TokenDTO tokenDTO = request.getTokenDTO();
         String key = request.getRequestedPseudo();
         String userPseudo = request.getUserPseudo();
+        tokenDTO.setPseudo(userPseudo);
         if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
             String json = null;
             try {
@@ -355,6 +358,7 @@ public class UserController {
         TokenDTO tokenDTO = request.getTokenDTO();
         String key = request.getRequestedPseudo();
         String userPseudo = request.getUserPseudo();
+        tokenDTO.setPseudo(userPseudo);
         if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
             String json = null ;
             try{
