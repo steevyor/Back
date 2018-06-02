@@ -43,7 +43,7 @@ public class    TokenDAO implements DAO<Token>{
             if(result.next()){
                 String timer = result.getString("timer");
                 String key = result.getString("tokenKey");
-                return new Token(key, timer);
+                return new Token(key, timer, pseudo);
             } else return null;
         } catch (SQLException e) {
             Print.p("TokenDAO.get : SQL Exception");
@@ -68,8 +68,9 @@ public class    TokenDAO implements DAO<Token>{
                 key = result.getString("tokenKey");
                 Print.p("Token.getByKey : key : "+key);
                 timer = result.getString("timer");
-                Print.p("Token.getByKey : returning Token with key = "+key +"; and timer = "+timer);
-                return new Token(key, timer);
+                pseudo = result.getString("userPseudo");
+                Print.p("Token.getByKey : returning Token with key = "+key +"; timer = "+timer +"; pseudo = " +pseudo);
+                return new Token(key, timer, pseudo);
             }
             else{
                 System.out.println("NullPointerException");

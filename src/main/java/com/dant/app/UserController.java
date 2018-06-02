@@ -1,12 +1,14 @@
 package com.dant.app;
 
 import com.dant.Print;
-import com.dant.database.FriendshipDAO;
-import com.dant.entity.Friendship;
 import com.dant.entity.Token;
-import com.dant.entity.dto.*;
+import com.dant.entity.dto.CoordinateDTO;
+import com.dant.entity.dto.InvitationDTO;
+import com.dant.entity.dto.TokenDTO;
+import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.request.*;
+import com.dant.service.InvitationService;
 import com.dant.service.TokenService;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
@@ -33,6 +35,8 @@ public class UserController {
 
     private final UserService userService = new UserService();
     private final TokenService tokenService = new TokenService();
+    private final InvitationService invitationService = new InvitationService();
+
 
     @POST
     @Path("/tests")
@@ -40,6 +44,7 @@ public class UserController {
         System.out.println("in tests");
         TokenDTO tokenDTO = saveRequest.getTokenDTO();
         UserDTO userDTO = saveRequest.getUserDTO();
+        tokenDTO.setPseudo(userDTO.getPseudo());
         System.out.println(userDTO.getPseudo());
         String a = saveRequest.getTokenDTO().getKey();
         System.out.println(a);
@@ -170,6 +175,7 @@ public class UserController {
         System.out.println("UserControler.sendFriendsPositions :");
         UserDTO userDTO = request.getUserDTO();
         TokenDTO tokenDTO = request.getTokenDTO();
+        tokenDTO.setPseudo(request.getPseudo());
         System.out.println(userDTO.getPseudo() +" :" +tokenDTO.getKey());
         System.out.println(request.getPseudo() +" :" +request.getTokenKey());
         if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey()) ){
@@ -208,6 +214,132 @@ public class UserController {
         }
     }
 
+
+
+    @POST
+    @Path("/invitationList")
+    public Response sendInvitationList(InvitationListRequest invitationListRequest){
+        UserDTO userDTO = invitationListRequest.getUserDTO();
+        TokenDTO tokenDTO = invitationListRequest.getTokenDTO();
+        tokenDTO.setPseudo(userDTO.getPseudo());
+        System.out.println("UserController.sendInvitationlist : TokenDTO.getPseudo = "+tokenDTO.getPseudo());
+        if(isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey())){
+            String json = null;
+            try {
+                if(tokenService.canUseService(tokenDTO)){
+                    HashMap map = new HashMap();
+                    map.put("emitters", invitationService.getAllInvitationsFromUser(userDTO));
+                    map.put("token", tokenDTO.getKey());
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO,userDTO.getPseudo());
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }else{
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @POST
+    @Path("/updateUserCoordinates")
+    public Response updateUserPosition(PositionRequest pos) {
+        UserDTO userdto = pos.getUserDTO();
+        CoordinateDTO coordDTO = pos.getCoordinateDTO();
+        TokenDTO tokenDTO = pos.getTokenDTO();
+        tokenDTO.setPseudo(userdto.getPseudo());
+        System.out.println("UserControler.updateUserPosition:");
+        System.out.println(userdto.getPseudo() +" :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : "+tokenDTO.getKey());
+        if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())){
+            System.out.println("UserControler.updateUserPosition: : fields are not blank");
+            String json = null;
+            try {
+                if(tokenService.canUseService(tokenDTO)) {
+                    System.out.println("UserControler.updateUserPosition: : can use service ok");
+                    userService.updateCoord(userdto, coordDTO);
+                    System.out.println("UserControler.sendFriendsPositions : update successfully done ! ");
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, userdto.getPseudo());
+                    HashMap map = new HashMap();
+                    map.put("token", tokenDTO);
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }
+            } catch (ForbiddenException e) {
+                System.out.println(e);
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            } catch (SQLException f) {
+                System.out.println(f);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } else {
+            System.out.println("NO_CONTENT Exception");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
+
+    @POST
+    @Path("/researchFriend")
+    public Response researchFriend(ResearchFriendRequest request) {
+        TokenDTO tokenDTO = request.getTokenDTO();
+        String key = request.getRequestedPseudo();
+        String userPseudo = request.getUserPseudo();
+        tokenDTO.setPseudo(userPseudo);
+        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
+            String json = null;
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    List list = new ArrayList(userService.findCorrespondingUsers(key));
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, userPseudo);
+                    map.put("utilisateurs", list);
+                    map.put("token", tokenDTO);
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }else{
+                    return  Response.status(Response.Status.FORBIDDEN).build();
+                }
+            } catch (SQLException e) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } else {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
+
+    @POST
+    @Path("/deleteFriendShip")
+    public Response deleteFriendShip (ResearchFriendRequest request){
+        TokenDTO tokenDTO = request.getTokenDTO();
+        String key = request.getRequestedPseudo();
+        String userPseudo = request.getUserPseudo();
+        tokenDTO.setPseudo(userPseudo);
+        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
+            String json = null ;
+            try{
+                if (tokenService.canUseService(tokenDTO)){
+                    List list = new ArrayList(userService.findCorrespondingUsers(key));
+                    HashMap map = new HashMap();
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO,userPseudo);
+                    map.put("utilisateur",list);
+                    map.put("token", tokenDTO);
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }else{
+                    return  Response.status(Response.Status.FORBIDDEN).build();                }
+            } catch (SQLException e) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else{
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+    }
 
     @POST
     @Path("/sendInvitation")
@@ -252,95 +384,52 @@ public class UserController {
     }
 
     @POST
-    @Path("/updateUserCoordinates")
-    public Response updateUserPosition(PositionRequest pos) {
-        UserDTO userdto = pos.getUserDTO();
-        CoordinateDTO coordDTO = pos.getCoordinateDTO();
-        TokenDTO tokenDTO = pos.getTokenDTO();
-        System.out.println("UserControler.updateUserPosition:");
-        System.out.println(userdto.getPseudo() +" :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : "+tokenDTO.getKey());
-        if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())){
-            System.out.println("UserControler.updateUserPosition: : fields are not blank");
-            String json = null;
-            try {
-                if(tokenService.canUseService(tokenDTO)) {
-                    System.out.println("UserControler.updateUserPosition: : can use service ok");
-                    userService.updateCoord(userdto, coordDTO);
-                    System.out.println("UserControler.sendFriendsPositions : update successfully done ! ");
-                    tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, userdto.getPseudo());
-                    HashMap map = new HashMap();
-                    map.put("token", tokenDTO);
-                    json = gson.toJson(map);
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }
-            } catch (ForbiddenException e) {
-                System.out.println(e);
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            } catch (SQLException f) {
-                System.out.println(f);
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-            return Response.status(Response.Status.NO_CONTENT).build();
-        } else {
-            System.out.println("NO_CONTENT Exception");
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
-    }
-
-    @POST
-    @Path("/researchFriend")
-    public Response researchFriend(ResearchFriendRequest request) {
-        TokenDTO tokenDTO = request.getTokenDTO();
-        String key = request.getRequestedPseudo();
-        String userPseudo = request.getUserPseudo();
-        //FriendshipDTO friendshipDTO = new FriendshipDAO().delete(this.key,this.userPseudo);
-        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
+    @Path("/refuseInvitation")
+    public Response refuseInvitation (InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+            System.out.println("UserControler.refuseInvitation : fields are not blank");
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
-                    List list = new ArrayList(userService.findCorrespondingUsers(key));
+                    userService.refuseInvitation(invitationDTO);
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, userPseudo);
-                    map.put("utilisateurs", list);
-                    map.put("token", tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }else{
-                    return  Response.status(Response.Status.FORBIDDEN).build();
-                }
-            } catch (SQLException e) {
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            }catch (SQLException e){
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        } else {
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
-    @Path("/deleteFriendShip")
-    public Response deleteFriendShip (ResearchFriendRequest request){
-        TokenDTO tokenDTO = request.getTokenDTO();
-        String userPseudo = request.getRequestedPseudo();
-
-        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(userPseudo)){
-            String json = null ;
-            try{
-                if (tokenService.canUseService(tokenDTO)){
+    @Path("/acceptInvitation")
+    public Response acceptInvitation (InvitationRequest invitationRequest) {
+        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+        TokenDTO tokenDTO = invitationRequest.getTokenDTO();
+        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+            System.out.println("UserControler.acceptInvitation : fields are not blank");
+            String json = null;
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    userService.acceptInvitation(invitationDTO);
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO,tokenDTO.getPseudo());
-                    map.put("token", tokenDTO);
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }else{
-                    return  Response.status(Response.Status.FORBIDDEN).build();                }
-            } catch (SQLException e) {
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            }catch (SQLException e){
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }else{
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

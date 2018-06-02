@@ -80,6 +80,14 @@ public class UserService {
             this.invitationdao.save(new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId()));
     }
 
+    public void refuseInvitation(InvitationDTO invitationDTO) throws SQLException {
+        this.invitationdao.refuse(new Invitation(invitationDTO.getEmitterId(), invitationDTO.getRecepterId()));
+    }
+
+    public void acceptInvitation(InvitationDTO invitationDTO) throws SQLException {
+        this.invitationdao.accept(new Invitation(invitationDTO.getEmitterId(), invitationDTO.getRecepterId()));
+    }
+
     public void updateCoord(UserDTO user, CoordinateDTO coord) throws SQLException {
             userdao.updateCoordinates(new Coordinate(coord.getxCoordinate(), coord.getyCoordinate()), user.getPseudo());
             System.out.println("User Service.updtaCoord : update ok");

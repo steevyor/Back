@@ -31,6 +31,33 @@ public class InvitationDAO implements  DAO<Invitation>{
             }
     }
 
+    public void accept(Invitation invitation){
+        try (Statement st = connection.createStatement()) {
+
+            preparedStatement = connection.prepareStatement("insert into friendship values(?, ?);");
+            preparedStatement.setString(1, invitation.getEmitterId());
+            preparedStatement.setString(2, invitation.getRecepterId());
+            preparedStatement.executeUpdate();
+
+            preparedStatement = connection.prepareStatement("insert into friendship values(?, ?);");
+            preparedStatement.setString(1, invitation.getRecepterId());
+            preparedStatement.setString(2, invitation.getEmitterId());
+            preparedStatement.executeUpdate();
+
+            this.delete(invitation);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refuse(Invitation invitation){
+        try{
+            this.delete(invitation);
+        } catch (InternalServerException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Invitation get(String key) {
         ResultSet result = null;
@@ -51,7 +78,7 @@ public class InvitationDAO implements  DAO<Invitation>{
     @Override
     public void delete(Invitation object) {
         try {
-            preparedStatement = connection.prepareStatement("DELETE * from invitation where receiver = (?) and emitter = (?);");
+            preparedStatement = connection.prepareStatement("DELETE FROM 'invitation' WHERE 'receiver' = (?) AND 'emitter' = (?);");
             preparedStatement.setString(1, object.getRecepterId());
             preparedStatement.setString(2, object.getRecepterId());
             preparedStatement.executeUpdate();
@@ -92,10 +119,21 @@ public class InvitationDAO implements  DAO<Invitation>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return invitations;
-
     }
 
+    public List<String> getAllInvitationsFromUser(String userPseudo) {
+        ArrayList<String> requesters = new ArrayList<String>();
+        ResultSet result = null;
+        try(Statement st = connection.createStatement()) {
+            result = st.executeQuery("SELECT emitter FROM invitation WHERE receiver = \'" +userPseudo +"\' ;");
+            while(result.next()){
+                requesters.add(result.getString("emitter"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requesters;
+    }
 
 }
