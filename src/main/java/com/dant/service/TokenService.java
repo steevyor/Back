@@ -2,6 +2,7 @@ package com.dant.service;
 
 import com.dant.database.TokenDAO;
 import com.dant.entity.Token;
+import com.dant.entity.User;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import org.apache.commons.lang3.ObjectUtils;
@@ -13,19 +14,23 @@ public class TokenService {
     private final TokenDAO dao = new TokenDAO();
 
     public boolean canUseService(TokenDTO dto) throws SQLException{
-        System.out.println("TokenService.canUseService : getting token Object by DTOKey");
-        System.out.println(dto.getKey());
-        try{
-            System.out.println("TokenService.canUseService : ");
-            Token currentInDataBaseToken = dao.getByKey(dto.getKey());
-            System.out.println("TokenService.canUseService : recuperated Token :"+currentInDataBaseToken.getTokenKey());
-            System.out.println("TokenService.canUseService : timer : "+currentInDataBaseToken.getTimer());
-            System.out.println("TokenService.canUseService : "+currentInDataBaseToken.isTimerGapValid());
-            return currentInDataBaseToken.isTimerGapValid();
-        }
-        catch (NullPointerException e){
-            return false;
-        }
+        Token t = dao.getByKey(dto.getKey());
+        System.out.println("TokenService.canUseService : Token initialised");
+        System.out.println("dto.getPseudo = "+dto.getPseudo() +"; Token.getPseudo = " +t.getUserPseudo());
+        if(dto.getPseudo().equals( t.getUserPseudo())) {
+            System.out.println("TokenService.canUseService : getting token Object by DTOKey");
+            System.out.println(dto.getKey());
+            try {
+                System.out.println("TokenService.canUseService : ");
+                Token currentInDataBaseToken = dao.getByKey(dto.getKey());
+                System.out.println("TokenService.canUseService : recuperated Token :" + currentInDataBaseToken.getTokenKey());
+                System.out.println("TokenService.canUseService : timer : " + currentInDataBaseToken.getTimer());
+                System.out.println("TokenService.canUseService : " + currentInDataBaseToken.isTimerGapValid());
+                return currentInDataBaseToken.isTimerGapValid();
+            } catch (NullPointerException e) {
+                return false;
+            }
+        }else return false;
     }
 
     public void updateTokenTimer(TokenDTO dto) throws SQLException{

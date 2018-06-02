@@ -17,6 +17,8 @@ public class Token {
     private String key;
     LocalDateTime timer;
 
+    private String userPseudo = null;
+
     //GitTest
 
 
@@ -35,6 +37,12 @@ public class Token {
     public Token(String key,String currentTime){
         this.key = key;
         this.currentTime = currentTime;
+    }
+
+    public Token(String key,String currentTime, String userPseudo){
+        this.key = key;
+        this.currentTime = currentTime;
+        this.userPseudo =userPseudo;
     }
 
 
@@ -65,6 +73,14 @@ public class Token {
 
     public String getTimer() {
         return this.currentTime;
+    }
+
+    public String getUserPseudo() {
+        return userPseudo;
+    }
+
+    public void setUserPseudo(String userPseudo) {
+        this.userPseudo = userPseudo;
     }
 
     public boolean isTimerGapValid(){

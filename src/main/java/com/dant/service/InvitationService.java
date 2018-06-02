@@ -7,6 +7,7 @@ import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.UserDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InvitationService {
@@ -26,8 +27,8 @@ public class InvitationService {
         return invit;
     }
 
-    public List<InvitationDTO> getAllInvitations(UserDTO userDTO) throws SQLException{
-
+    public List<String> getAllInvitationsFromUser(UserDTO userDTO) throws SQLException{
+        return daoinvitation.getAllInvitationsFromUser(userDTO.getPseudo());
     }
 
 

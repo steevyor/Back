@@ -8,6 +8,7 @@ import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.request.*;
+import com.dant.service.InvitationService;
 import com.dant.service.TokenService;
 import com.dant.service.UserService;
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ public class UserController {
 
     private final UserService userService = new UserService();
     private final TokenService tokenService = new TokenService();
+    private final InvitationService invitationService = new InvitationService();
 
 
     @POST
@@ -256,18 +258,29 @@ public class UserController {
     @POST
     @Path("/invitationList")
     public Response sendInvitationList(InvitationListRequest invitationListRequest){
-        String userPseudo = invitationListRequest.getUserDTO().getPseudo();
+        UserDTO userDTO = invitationListRequest.getUserDTO();
         TokenDTO tokenDTO = invitationListRequest.getTokenDTO();
-        if(isNotBlank(userPseudo) && isNotBlank(tokenDTO.getKey())){
+        tokenDTO.setPseudo(userDTO.getPseudo());
+        System.out.println("UserController.sendInvitationlist : TokenDTO.getPseudo = "+tokenDTO.getPseudo());
+        if(isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey())){
             String json = null;
             try {
                 if(tokenService.canUseService(tokenDTO)){
-                    invitationService
+                    HashMap map = new HashMap();
+                    map.put("emitters", invitationService.getAllInvitationsFromUser(userDTO));
+                    map.put("token", tokenDTO.getKey());
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO,userDTO.getPseudo());
+                    json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                }else{
+                    return Response.status(Response.Status.FORBIDDEN).build();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
