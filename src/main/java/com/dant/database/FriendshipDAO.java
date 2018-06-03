@@ -50,12 +50,10 @@ public class FriendshipDAO implements DAO<Friendship> {
 
     }
 
-
-    @Override
-    public void delete(String user, String userFriend) throws SQLException {
+    public void delete(String userPseudo, String userFriend) throws SQLException {
         try(Statement st = connection.createStatement()){
-            st.executeUpdate("delete from friendship where userPseudo = '" + user + "' and friendPseudo =' "+ userFriend + "';");
-            st.executeUpdate("delete from friendship where userPseudo = '" + userFriend + "' and friendPseudo =' "+ user + "';");
+            st.executeUpdate("delete from friendship where userPseudo = \'" +userPseudo + "\' and friendPseudo = \' " +userFriend + "\';");
+            st.executeUpdate("delete from friendship where userPseudo = \'" + userFriend + "\' and friendPseudo = \' " +userPseudo + "\';");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException();

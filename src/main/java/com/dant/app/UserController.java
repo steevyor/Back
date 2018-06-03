@@ -312,17 +312,17 @@ public class UserController {
     @Path("/deleteFriendShip")
     public Response deleteFriendShip(DeleteFriendRequest request) throws SQLException {
         TokenDTO tokenDTO = request.getTokenDTO();
-        String user = request.getUserPseudo();
-        String userFriend = request.getFriendPseudo();
-        tokenDTO.setPseudo(user);
-        if (isNotBlank(user) && isNotBlank(userFriend)) {
+        String userPseudo = request.getUserPseudo();
+        String userFriendPseudo = request.getFriendPseudo();
+        tokenDTO.setPseudo(userPseudo);
+        if (isNotBlank(userPseudo) && isNotBlank(userFriendPseudo)) {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
-                    userService.deleteFriend(user, userFriend);
+                    userService.deleteFriend(userPseudo, userFriendPseudo);
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, user);
+                    tokenService.save(tokenDTO, userPseudo);
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
