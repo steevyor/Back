@@ -24,7 +24,7 @@ public class UserService {
     private final UserDAO userdao = new UserDAO();
     private final InvitationDAO invitationdao = new InvitationDAO();
     private final TokenDAO tokendao = new TokenDAO();
-    private final FriendshipDAO deletedao = new FriendshipDAO();
+    private final FriendshipDAO friendshipdao = new FriendshipDAO();
 
     public User save(UserDTO dto) {
         User user = new User(dto.pseudo, dto.email, dto.password);
@@ -76,7 +76,7 @@ public class UserService {
 
     public void deleteFriend(String user, String userFriend) throws SQLException{
         Print.p("UserService.deleteFriend :user + friend "+user+userFriend);
-        this.deletedao.delete(new Friendship(user, userFriend));
+        this.friendshipdao.delete(new Friendship(user, userFriend));
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {

@@ -314,12 +314,12 @@ public class UserController {
         TokenDTO tokenDTO = request.getTokenDTO();
         String user = request.getUserPseudo();
         String userFriend = request.getFriendPseudo();
-        userService.deleteFriend(user, userFriend);
         tokenDTO.setPseudo(user);
         if (isNotBlank(user) && isNotBlank(userFriend)) {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
+                    userService.deleteFriend(user, userFriend);
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, user);
