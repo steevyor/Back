@@ -386,10 +386,18 @@ public class UserController {
     @POST
     @Path("/refuseInvitation")
     public Response refuseInvitation (InvitationRequest invitationRequest) {
-        InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
+
+
+        System.out.println("UserController.refuseInvitation : invitationRequest ( emitter, recepter ) = "
+                +invitationRequest.getInvitationDTO().getEmitterId() +" ; "
+                +invitationRequest.getInvitationDTO().getRecepterId());
+
+
+        InvitationDTO invitationDTO = new InvitationDTO(invitationRequest.getInvitationDTO().getEmitterId(),
+                invitationRequest.getInvitationDTO().getRecepterId());
         TokenDTO tokenDTO = invitationRequest.getTokenDTO();
-        tokenDTO.setPseudo(invitationDTO.getEmitterId());
-        if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
+        tokenDTO.setPseudo(invitationDTO.getRecepterId());
+        if (isNotBlank(invitationDTO.getRecepterId()) && isNotBlank(tokenDTO.getKey())) {
             System.out.println("UserControler.refuseInvitation : fields are not blank");
             String json = null;
             try {
@@ -397,7 +405,7 @@ public class UserController {
                     userService.refuseInvitation(invitationDTO);
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getEmitterId());
+                    tokenService.save(tokenDTO, invitationRequest.getInvitationDTO().getRecepterId());
                     map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
@@ -413,7 +421,7 @@ public class UserController {
     public Response acceptInvitation (InvitationRequest invitationRequest) {
         InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
         TokenDTO tokenDTO = invitationRequest.getTokenDTO();
-        tokenDTO.setPseudo(invitationDTO.getEmitterId());
+        tokenDTO.setPseudo(invitationDTO.getRecepterId());
         if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
             System.out.println("UserControler.acceptInvitation : fields are not blank");
             String json = null;

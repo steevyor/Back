@@ -77,11 +77,16 @@ public class InvitationDAO implements  DAO<Invitation>{
 
     @Override
     public void delete(Invitation object) {
-        try {
-            preparedStatement = connection.prepareStatement("DELETE FROM 'invitation' WHERE 'receiver' = (?) AND 'emitter' = (?);");
-            preparedStatement.setString(1, object.getRecepterId());
-            preparedStatement.setString(2, object.getRecepterId());
-            preparedStatement.executeUpdate();
+        ResultSet result = null;
+        int result2 = 0;
+        try(Statement st = connection.createStatement()) {
+            System.out.println("InvitationDAO.delete : deleting invitation ( emitter, recepter ) = " +object.getEmitterId() +" ; " +object.getRecepterId());
+            result2 = st.executeUpdate("DELETE FROM invitation WHERE receiver = " +"\'" +object.getRecepterId() +"\' AND emitter = " +"\'" +object.getEmitterId() +"\' ;");
+            System.out.println("InvitationDAO.delete : deleted invitation with result = " +result2);
+            //preparedStatement = connection.prepareStatement("DELETE FROM 'invitation' WHERE 'receiver' = (?) AND 'emitter' = (?);");
+           // preparedStatement.setString(1, object.getRecepterId());
+            //preparedStatement.setString(2, object.getRecepterId());
+           //preparedStatement.executeUpdate();
 
         } catch (SQLException e){
             throw new InternalServerException(e);
