@@ -73,9 +73,9 @@ public class UserService {
         return this.userdao.getFriendsPosition(dto.pseudo);
     }
 
-    public void deleteFriend(String user, String userFriend) throws SQLException{
-        Print.p("UserService.deleteFriend :user + friend "+user+userFriend);
-        this.friendshipdao.delete(new Friendship(user, userFriend));
+    public void deleteFriend(String userPseudo, String userFriendPseudo) throws SQLException{
+        Print.p("UserService.deleteFriend :deleting "+userFriendPseudo +"from " +userPseudo +"friendlist");
+        this.friendshipdao.delete(new Friendship(userPseudo, userFriendPseudo));
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {

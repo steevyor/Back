@@ -47,7 +47,16 @@ public class FriendshipDAO implements DAO<Friendship> {
 
     @Override
     public void delete(Friendship object) throws SQLException {
-
+        System.out.println("FriendshipDAO.delete : deleting friendship (user, friend) = " +object.getUserPseudo() +" ; " +object.getFriendPseudo());
+        try(Statement st = connection.createStatement()){
+            int result1 = st.executeUpdate("DELETE FROM friendship WHERE userPseudo = " +"\'" +object.getUserPseudo() +"\'" +"AND friendPseudo = " +"\'" +object.getFriendPseudo() +"\';");
+            int result2 = st.executeUpdate("DELETE FROM friendship WHERE userPseudo = \'" +object.getFriendPseudo() +"\'" +"AND friendPseudo = " +"\'" +object.getUserPseudo() +"\';");
+            System.out.println("FriendshipDAO.delete : result1 ; result2 " +result1 +" ; " +result2);
+            System.out.println("FriendshipDAO.delete : friendship deleted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
     }
 
     public void delete(String userPseudo, String userFriend) throws SQLException {

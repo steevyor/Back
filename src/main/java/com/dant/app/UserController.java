@@ -315,11 +315,14 @@ public class UserController {
         String userPseudo = request.getUserPseudo();
         String userFriendPseudo = request.getFriendPseudo();
         tokenDTO.setPseudo(userPseudo);
+        System.out.println("UserControler.deleteFriendship : current user = " +userPseudo +"; friend to delete = " +userFriendPseudo);
         if (isNotBlank(userPseudo) && isNotBlank(userFriendPseudo)) {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
+                    System.out.println("UserControler.deleteFriendship : now deleting friend ");
                     userService.deleteFriend(userPseudo, userFriendPseudo);
+
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userPseudo);
