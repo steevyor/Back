@@ -1,11 +1,9 @@
 package com.dant.service;
 
 import com.dant.Print;
-import com.dant.database.DAO;
-import com.dant.database.InvitationDAO;
-import com.dant.database.TokenDAO;
-import com.dant.database.UserDAO;
+import com.dant.database.*;
 import com.dant.entity.Coordinate;
+import com.dant.entity.Friendship;
 import com.dant.entity.Invitation;
 import com.dant.entity.User;
 import com.dant.entity.dto.CoordinateDTO;
@@ -13,6 +11,7 @@ import com.dant.entity.dto.InvitationDTO;
 import com.dant.entity.dto.TokenDTO;
 import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
+import com.dant.request.DeleteFriendRequest;
 import com.dant.security.Encripter;
 
 import javax.ws.rs.ForbiddenException;
@@ -25,6 +24,7 @@ public class UserService {
     private final UserDAO userdao = new UserDAO();
     private final InvitationDAO invitationdao = new InvitationDAO();
     private final TokenDAO tokendao = new TokenDAO();
+    private final FriendshipDAO deletedao = new FriendshipDAO();
 
     public User save(UserDTO dto) {
         User user = new User(dto.pseudo, dto.email, dto.password);
@@ -72,6 +72,11 @@ public class UserService {
 
     public List<User> sendFriendsPositionList(UserDTO dto) throws SQLException {
             return this.userdao.getFriendsPosition(dto.pseudo);
+    }
+
+    public void deleteFriend(String user, String userFriend) throws SQLException{
+        Print.p("UserService.deleteFriend :user + friend "+user+userFriend);
+        this.deletedao.delete(new Friendship(user, userFriend));
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {
