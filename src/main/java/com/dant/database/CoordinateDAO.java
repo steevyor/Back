@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.List;
 
 public class CoordinateDAO implements DAO<Coordinate> {
+
     private final Connection connection;
 
     public CoordinateDAO() {
@@ -50,20 +51,6 @@ public class CoordinateDAO implements DAO<Coordinate> {
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public Coordinate update(Coordinate object) {
