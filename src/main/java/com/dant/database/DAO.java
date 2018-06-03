@@ -11,6 +11,8 @@ public interface DAO<T> {
 
     void delete(T object) throws SQLException;
 
+    void delete(String user, String userFriend) throws SQLException;
+
     T update(T object);
 
     List<T> getAll();
