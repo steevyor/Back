@@ -38,4 +38,5 @@ com\dant\request\InvitationRequest.class
 com\dant\entity\User.class
 com\dant\entity\Coordinate.class
 com\dant\service\InvitationService.class
+com\dant\request\UserRequest.class
 com\dant\database\TokenDAO.class

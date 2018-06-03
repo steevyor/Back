@@ -9,6 +9,7 @@ public class InvitationRequest {
     public String recepterPseudo;
     public String tokenKey;
 
+
     public InvitationRequest(){
     }
 

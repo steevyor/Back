@@ -96,5 +96,4 @@ public class UserService {
     public List<String> findCorrespondingUsers(String s) throws  SQLException {
         return userdao.getCorrespondingUsers(s);
     }
-
 }
