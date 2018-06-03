@@ -15,6 +15,7 @@ import com.dant.entity.dto.UserDTO;
 import com.dant.exception.InternalServerException;
 import com.dant.security.Encripter;
 
+import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.ForbiddenException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,10 +36,10 @@ public class UserService {
     public boolean authenticate(UserDTO dto) throws SQLException {
         User user;
         user = userdao.get(dto.pseudo);
-        System.out.println("UserService.authenticate : UserPseudo =" +user.getPseudo());
-        System.out.println("UserService.authenticate : UserPassword =" +user.getPassword());
-        System.out.println("UserService.authenticate : UserDTOPassword =" +dto.password);
-        System.out.println("UserService.authenticate : UserDTOPassword Encrypted =" +Encripter.encrypt(dto.password));
+        System.out.println("UserService.authenticate : UserPseudo =" + user.getPseudo());
+        System.out.println("UserService.authenticate : UserPassword =" + user.getPassword());
+        System.out.println("UserService.authenticate : UserDTOPassword =" + dto.password);
+        System.out.println("UserService.authenticate : UserDTOPassword Encrypted =" + Encripter.encrypt(dto.password));
         if (user.getPassword().equals(Encripter.encrypt(dto.password))) {
             return true;
         } else {
@@ -55,8 +56,8 @@ public class UserService {
             System.out.println("UserService.inscription : user does not exist");
             System.out.println("UserService.inscription : starting encryption : ");
             String encryptedPassword = Encripter.encrypt(dto.password);
-            System.out.println("UserService.inscription : userDTO password = "+dto.password
-                    +" ; encrypted password = "+encryptedPassword);
+            System.out.println("UserService.inscription : userDTO password = " + dto.password
+                    + " ; encrypted password = " + encryptedPassword);
             userdao.save(new User(dto.pseudo, dto.email, encryptedPassword));
             System.out.println("UserService.inscription : user saved");
             return true;
@@ -64,20 +65,18 @@ public class UserService {
     }
 
 
-    public List<String> sendFriendList(UserDTO dto) throws SQLException {
-        if(this.tokendao.get(dto.pseudo).equals(dto.token)){
-            return this.userdao.getFriends(dto.pseudo);
-        } else throw new ForbiddenException();
+    public List<String> sendFriendList(String userPseudo) throws SQLException {
+        return this.userdao.getFriends(userPseudo);
     }
 
     public List<User> sendFriendsPositionList(UserDTO dto) throws SQLException {
-            return this.userdao.getFriendsPosition(dto.pseudo);
+        return this.userdao.getFriendsPosition(dto.pseudo);
     }
 
     public void sendInvitation(InvitationDTO invitationDto, TokenDTO tokenDTO) throws SQLException {
-        Print.p("UserService.sendInvitation : Invitation(emiter, recepter) = "+invitationDto.getEmitterId() +" ; "+invitationDto.getRecepterId());
-        Print.p("UserService.sendInvitation : Token(pseudo, key, timer ) = "+tokenDTO.getPseudo()+" ; "+tokenDTO.getKey() +" ; "+tokenDTO.getCurrentTime());
-            this.invitationdao.save(new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId()));
+        Print.p("UserService.sendInvitation : Invitation(emiter, recepter) = " + invitationDto.getEmitterId() + " ; " + invitationDto.getRecepterId());
+        Print.p("UserService.sendInvitation : Token(pseudo, key, timer ) = " + tokenDTO.getPseudo() + " ; " + tokenDTO.getKey() + " ; " + tokenDTO.getCurrentTime());
+        this.invitationdao.save(new Invitation(invitationDto.getEmitterId(), invitationDto.getRecepterId()));
     }
 
     public void refuseInvitation(InvitationDTO invitationDTO) throws SQLException {
@@ -89,11 +88,30 @@ public class UserService {
     }
 
     public void updateCoord(UserDTO user, CoordinateDTO coord) throws SQLException {
-            userdao.updateCoordinates(new Coordinate(coord.getxCoordinate(), coord.getyCoordinate()), user.getPseudo());
-            System.out.println("User Service.updtaCoord : update ok");
+        userdao.updateCoordinates(new Coordinate(coord.getxCoordinate(), coord.getyCoordinate()), user.getPseudo());
+        System.out.println("User Service.updtaCoord : update ok");
     }
 
-    public List<String> findCorrespondingUsers(String s) throws  SQLException {
+    public List<String> findCorrespondingUsers(String s) throws SQLException {
         return userdao.getCorrespondingUsers(s);
+    }
+
+    public List<String> getFriendshipPropositions(String userPseudo) throws SQLException {
+        try {
+            List<String> userFriends = sendFriendList(userPseudo);
+            List<String> friendsOfUserFriends = new ArrayList<String>();
+            for (String user : userFriends) {
+                List<String> userList = sendFriendList(user);
+                for (String user2 : userList) {
+                    if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2)) {
+                        friendsOfUserFriends.add(user2);
+                    }
+                }
+            }
+            return friendsOfUserFriends;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
