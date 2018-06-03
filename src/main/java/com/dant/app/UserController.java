@@ -319,11 +319,9 @@ public class UserController {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
-                    List list = new ArrayList(userService.findCorrespondingUsers(key));
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userPseudo);
-                    map.put("utilisateur", list);
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
