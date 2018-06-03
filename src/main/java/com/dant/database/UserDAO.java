@@ -139,14 +139,6 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public void authenticate(String l , String p){
-        try(Statement st = connection.createStatement()) {
-
-        }catch (SQLException e){
-
-        }
-    }
-
     //modifier la requete quand la relation entres amis sera faite
     public List<String> getFriends(String key) throws SQLException {
         List<String> users = new ArrayList<String>();

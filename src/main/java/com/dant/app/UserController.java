@@ -52,7 +52,7 @@ public class UserController {
         Token t = new Token(saveRequest.getTokenDTO().getKey());
         System.out.println("tioken bviou");
         try {
-            if(tokenService.canUseService(tokenDTO)){
+            if (tokenService.canUseService(tokenDTO)) {
                 userService.save(saveRequest.getUserDTO());
                 System.out.println("acepted");
                 String json = null;
@@ -63,7 +63,7 @@ public class UserController {
                 json = gson.toJson(map);
                 Response.status(Response.Status.ACCEPTED);
                 return Response.ok(json, MediaType.APPLICATION_JSON).build();
-            }else{
+            } else {
                 System.out.println("nucepted");
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
@@ -75,9 +75,9 @@ public class UserController {
 
     @POST
     @Path("/auth")
-    public Response authenticate(UserDTO dto ) {
+    public Response authenticate(UserDTO dto) {
         System.out.println("UserControler.authenticate :");
-        System.out.println(dto.pseudo +" :" +dto.password);
+        System.out.println(dto.pseudo + " :" + dto.password);
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo)) {
             System.out.println("UserControler.authenticate : fields are not blank");
             String json = null;
@@ -130,18 +130,17 @@ public class UserController {
         }
     }
 
-
     @POST
     @Path("/inscription")
-    public Response inscription(UserDTO dto ) {
+    public Response inscription(UserDTO dto) {
         System.out.println("UserControler.inscription : ");
         if (isNotBlank(dto.password) && isNotBlank(dto.pseudo) && isNotBlank(dto.email)) {
             System.out.printf("UserControler.inscription field not blank: pseudo = %s, password = %s, email = %s",
                     dto.pseudo, dto.password, dto.email);
             String json = null;
-            try{
+            try {
                 System.out.printf("UserControler.inscription : registering new user now");
-                if(userService.inscription(dto)){
+                if (userService.inscription(dto)) {
                     System.out.printf("UserControler.inscription : new user successfuly registered");
                     List list = new ArrayList();
                     System.out.println("UserControler.inscription : creating token now ");
@@ -153,10 +152,10 @@ public class UserController {
                     json = gson.toJson(list);
                     System.out.println("UserControler.inscription : json successfully created");
                 }
-            }catch (InternalServerException e){
+            } catch (InternalServerException e) {
                 System.out.println(e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-            }catch (ForbiddenException f){
+            } catch (ForbiddenException f) {
                 System.out.println(f);
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
@@ -168,7 +167,6 @@ public class UserController {
         }
     }
 
-
     @POST
     @Path("/friends")
     public Response sendFriends(UserRequest request) {
@@ -176,13 +174,13 @@ public class UserController {
         UserDTO userDTO = request.getUserDTO();
         TokenDTO tokenDTO = request.getTokenDTO();
         tokenDTO.setPseudo(request.getPseudo());
-        System.out.println(userDTO.getPseudo() +" :" +tokenDTO.getKey());
-        System.out.println(request.getPseudo() +" :" +request.getTokenKey());
-        if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey()) ){
+        System.out.println(userDTO.getPseudo() + " :" + tokenDTO.getKey());
+        System.out.println(request.getPseudo() + " :" + request.getTokenKey());
+        if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey())) {
             System.out.println("UserControler.sendFriendsPositions : fields are not blank");
             String json = null;
             try {
-                if(tokenService.canUseService(tokenDTO)) {
+                if (tokenService.canUseService(tokenDTO)) {
                     System.out.println("UserControler.sendFriendsPositions : can use service sending now");
                     System.out.println("UserControler.sendFriendsPositions : adding data to json ");
                     HashMap map = new HashMap();
@@ -214,34 +212,32 @@ public class UserController {
         }
     }
 
-
-
     @POST
     @Path("/invitationList")
-    public Response sendInvitationList(InvitationListRequest invitationListRequest){
+    public Response sendInvitationList(InvitationListRequest invitationListRequest) {
         UserDTO userDTO = invitationListRequest.getUserDTO();
         TokenDTO tokenDTO = invitationListRequest.getTokenDTO();
         tokenDTO.setPseudo(userDTO.getPseudo());
-        System.out.println("UserController.sendInvitationlist : TokenDTO.getPseudo = "+tokenDTO.getPseudo());
-        if(isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey())){
+        System.out.println("UserController.sendInvitationlist : TokenDTO.getPseudo = " + tokenDTO.getPseudo());
+        if (isNotBlank(userDTO.getPseudo()) && isNotBlank(tokenDTO.getKey())) {
             String json = null;
             try {
-                if(tokenService.canUseService(tokenDTO)){
+                if (tokenService.canUseService(tokenDTO)) {
                     HashMap map = new HashMap();
                     map.put("emitters", invitationService.getAllInvitationsFromUser(userDTO));
                     map.put("token", tokenDTO.getKey());
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO,userDTO.getPseudo());
+                    tokenService.save(tokenDTO, userDTO.getPseudo());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }else{
+                } else {
                     return Response.status(Response.Status.FORBIDDEN).build();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }else return Response.status(Response.Status.NO_CONTENT).build();
+        } else return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
@@ -252,12 +248,12 @@ public class UserController {
         TokenDTO tokenDTO = pos.getTokenDTO();
         tokenDTO.setPseudo(userdto.getPseudo());
         System.out.println("UserControler.updateUserPosition:");
-        System.out.println(userdto.getPseudo() +" :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : "+tokenDTO.getKey());
-        if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())){
+        System.out.println(userdto.getPseudo() + " :" + coordDTO.getxCoordinate() + " : " + coordDTO.yCoordinate + " : " + tokenDTO.getKey());
+        if (isNotBlank(pos.getPseudo()) && isNotBlank(pos.getxCoordinates()) && isNotBlank(pos.getyCoordinates()) && isNotBlank(pos.getToken())) {
             System.out.println("UserControler.updateUserPosition: : fields are not blank");
             String json = null;
             try {
-                if(tokenService.canUseService(tokenDTO)) {
+                if (tokenService.canUseService(tokenDTO)) {
                     System.out.println("UserControler.updateUserPosition: : can use service ok");
                     userService.updateCoord(userdto, coordDTO);
                     System.out.println("UserControler.sendFriendsPositions : update successfully done ! ");
@@ -289,7 +285,7 @@ public class UserController {
         String key = request.getRequestedPseudo();
         String userPseudo = request.getUserPseudo();
         tokenDTO.setPseudo(userPseudo);
-        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
+        if (isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
@@ -301,8 +297,8 @@ public class UserController {
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }else{
-                    return  Response.status(Response.Status.FORBIDDEN).build();
+                } else {
+                    return Response.status(Response.Status.FORBIDDEN).build();
                 }
             } catch (SQLException e) {
                 return Response.status(Response.Status.NOT_FOUND).build();
@@ -314,29 +310,30 @@ public class UserController {
 
     @POST
     @Path("/deleteFriendShip")
-    public Response deleteFriendShip (ResearchFriendRequest request){
+    public Response deleteFriendShip(ResearchFriendRequest request) {
         TokenDTO tokenDTO = request.getTokenDTO();
         String key = request.getRequestedPseudo();
         String userPseudo = request.getUserPseudo();
         tokenDTO.setPseudo(userPseudo);
-        if(isNotBlank(tokenDTO.getKey()) && isNotBlank(key)){
-            String json = null ;
-            try{
-                if (tokenService.canUseService(tokenDTO)){
+        if (isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
+            String json = null;
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
                     List list = new ArrayList(userService.findCorrespondingUsers(key));
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO,userPseudo);
-                    map.put("utilisateur",list);
+                    tokenService.save(tokenDTO, userPseudo);
+                    map.put("utilisateur", list);
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }else{
-                    return  Response.status(Response.Status.FORBIDDEN).build();                }
+                } else {
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
             } catch (SQLException e) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }else{
+        } else {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
     }
@@ -348,12 +345,12 @@ public class UserController {
         TokenDTO tokenDTO = invitationRequest.getTokenDTO();
         tokenDTO.setPseudo(invitationDTO.getEmitterId());
         System.out.println("UserControler.sendInvitation :");
-        System.out.println(invitationDTO.getEmitterId() +" :" + tokenDTO.getKey());
+        System.out.println(invitationDTO.getEmitterId() + " :" + tokenDTO.getKey());
         if (isNotBlank(invitationDTO.getEmitterId()) && isNotBlank(tokenDTO.getKey())) {
             System.out.println("UserControler.sendInvitation : fields are not blank");
             String json = null;
             try {
-                if(tokenService.canUseService(tokenDTO)) {
+                if (tokenService.canUseService(tokenDTO)) {
                     System.out.println("UserControler.sendInvitation : updating ");
                     userService.sendInvitation(invitationDTO, tokenDTO);
                     System.out.println("UserControler.sendInvitation : update successfully done ! ");
@@ -363,7 +360,7 @@ public class UserController {
                     map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     Response.status(Response.Status.ACCEPTED);
-                }else{
+                } else {
                     System.out.println("nucepted");
                     return Response.status(Response.Status.UNAUTHORIZED).build();
                 }
@@ -385,12 +382,12 @@ public class UserController {
 
     @POST
     @Path("/refuseInvitation")
-    public Response refuseInvitation (InvitationRequest invitationRequest) {
+    public Response refuseInvitation(InvitationRequest invitationRequest) {
 
 
         System.out.println("UserController.refuseInvitation : invitationRequest ( emitter, recepter ) = "
-                +invitationRequest.getInvitationDTO().getEmitterId() +" ; "
-                +invitationRequest.getInvitationDTO().getRecepterId());
+                + invitationRequest.getInvitationDTO().getEmitterId() + " ; "
+                + invitationRequest.getInvitationDTO().getRecepterId());
 
 
         InvitationDTO invitationDTO = new InvitationDTO(invitationRequest.getInvitationDTO().getEmitterId(),
@@ -410,15 +407,15 @@ public class UserController {
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 } else return Response.status(Response.Status.FORBIDDEN).build();
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }else return Response.status(Response.Status.NO_CONTENT).build();
+        } else return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
     @Path("/acceptInvitation")
-    public Response acceptInvitation (InvitationRequest invitationRequest) {
+    public Response acceptInvitation(InvitationRequest invitationRequest) {
         InvitationDTO invitationDTO = invitationRequest.getInvitationDTO();
         TokenDTO tokenDTO = invitationRequest.getTokenDTO();
         tokenDTO.setPseudo(invitationDTO.getRecepterId());
@@ -435,9 +432,28 @@ public class UserController {
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 } else return Response.status(Response.Status.FORBIDDEN).build();
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }else return Response.status(Response.Status.NO_CONTENT).build();
+        } else return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @POST
+    @Path("/disconnect")
+    public Response disconnect(DisconnectionRequest disconnectionRequest) {
+        if (isNotBlank(disconnectionRequest.getUserPseudo())
+                && isNotBlank(disconnectionRequest.getTokenDTO().getKey())) {
+            TokenDTO tokenDTO = disconnectionRequest.getTokenDTO();
+            tokenDTO.setPseudo(disconnectionRequest.getUserPseudo());
+            System.out.println("UserControler.disconnect : fields are not blank");
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    tokenService.deleteToken(tokenDTO);
+                    return Response.status(Response.Status.ACCEPTED).build();
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            } catch (SQLException e) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } else return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
