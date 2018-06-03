@@ -233,7 +233,7 @@ public class UserController {
                 } else {
                     return Response.status(Response.Status.FORBIDDEN).build();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException e)     {
                 e.printStackTrace();
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -310,20 +310,19 @@ public class UserController {
 
     @POST
     @Path("/deleteFriendShip")
-    public Response deleteFriendShip(ResearchFriendRequest request) {
+    public Response deleteFriendShip(DeleteFriendRequest request) throws SQLException {
         TokenDTO tokenDTO = request.getTokenDTO();
-        String key = request.getRequestedPseudo();
-        String userPseudo = request.getUserPseudo();
-        tokenDTO.setPseudo(userPseudo);
-        if (isNotBlank(tokenDTO.getKey()) && isNotBlank(key)) {
+        String user = request.getUserPseudo();
+        String userFriend = request.getFriendPseudo();
+        userService.deleteFriend(user, userFriend);
+        tokenDTO.setPseudo(user);
+        if (isNotBlank(user) && isNotBlank(userFriend)) {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
-                    List list = new ArrayList(userService.findCorrespondingUsers(key));
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
-                    tokenService.save(tokenDTO, userPseudo);
-                    map.put("utilisateur", list);
+                    tokenService.save(tokenDTO, user);
                     map.put("token", tokenDTO);
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
@@ -456,4 +455,5 @@ public class UserController {
             }
         } else return Response.status(Response.Status.NO_CONTENT).build();
     }
-}
+
+    }
