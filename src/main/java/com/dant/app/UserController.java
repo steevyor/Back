@@ -472,7 +472,11 @@ public class UserController {
                     List suggestions = userService.getFriendshipPropositions(friendSuggestionRequest.getUserPseudo());
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, friendSuggestionRequest.getUserPseudo());
-                    return Response.ok(gson.toJson(suggestions), MediaType.APPLICATION_JSON).build();
+                    HashMap map = new HashMap();
+                    map.put("suggestions", suggestions);
+                    map.put("tokenKey", tokenDTO.getKey());
+                    String json = gson.toJson(map);
+                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 } else return Response.status(Response.Status.FORBIDDEN).build();
             } catch (SQLException e) {
                 e.printStackTrace();
