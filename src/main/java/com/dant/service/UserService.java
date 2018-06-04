@@ -105,16 +105,17 @@ public class UserService {
         try {
             List<String> userFriends = sendFriendList(userPseudo);
             List<String> friendsOfUserFriends = new ArrayList<String>();
+            List<String> invitationList = invitationdao.getAllInvitationsFromUser(userPseudo);
             for (String user : userFriends) {
                 List<String> userList = sendFriendList(user);
                 for (String user2 : userList) {
-                    if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2)) {
-                        friendsOfUserFriends.add(user2);
+                    if (!invitationList.contains(user2)) {
+                        if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2) && !user2.equals(userPseudo)) {
+                            friendsOfUserFriends.add(user2);
+                        }
                     }
-                    if(user2.equals(userPseudo)) friendsOfUserFriends.remove(user2);
                 }
             }
-            //for (String user3 : friendsOfUserFriends) if(user3.equals(userPseudo)) friendsOfUserFriends.remove(user3);
             return friendsOfUserFriends;
         } catch (SQLException e) {
             e.printStackTrace();
