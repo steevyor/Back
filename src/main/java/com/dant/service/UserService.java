@@ -98,17 +98,17 @@ public class UserService {
     }
 
     public List<String> findCorrespondingUsers(String s, String userPseudo) throws SQLException {
-        List<String> list = userdao.getCorrespondingUsers(s);
-        List<String> friendList = userdao.getFriends(userPseudo);
+        ArrayList<String> list = new ArrayList<String>(userdao.getCorrespondingUsers(s));
+        ArrayList<String> friendList = new ArrayList<String>(userdao.getFriends(userPseudo));
 
         Print.p(list.toString());
         Print.p(friendList.toString());
 
-        for(String user : list){
-            Print.p(user);
-            if(friendList.contains(user)){
-                Print.p(user +"deleted");
-                list.remove(user);
+        for(int i=0; i<list.size(); i++){
+            Print.p(list.get(i));
+            if(friendList.contains(list.get(i))){
+                Print.p(list.get(i) +" deleted");
+                list.remove(i);
             }
         }
         Print.p(list.toString());
