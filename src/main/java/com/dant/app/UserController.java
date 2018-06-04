@@ -289,7 +289,7 @@ public class UserController {
             String json = null;
             try {
                 if (tokenService.canUseService(tokenDTO)) {
-                    List list = new ArrayList(userService.findCorrespondingUsers(key));
+                    List list = new ArrayList(userService.findCorrespondingUsers(key, userPseudo));
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userPseudo);

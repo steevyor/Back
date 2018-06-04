@@ -97,8 +97,14 @@ public class UserService {
         System.out.println("User Service.updtaCoord : update ok");
     }
 
-    public List<String> findCorrespondingUsers(String s) throws SQLException {
-        return userdao.getCorrespondingUsers(s);
+    public List<String> findCorrespondingUsers(String s, String userPseudo) throws SQLException {
+        List<String> list = userdao.getCorrespondingUsers(s);
+        for(String user : list){
+            if(userdao.getFriends(userPseudo).contains(user)){
+                list.remove(user);
+            }
+        }
+        return list;
     }
 
     public List<String> getFriendshipPropositions(String userPseudo) throws SQLException {
