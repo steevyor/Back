@@ -111,8 +111,10 @@ public class UserService {
                     if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2)) {
                         friendsOfUserFriends.add(user2);
                     }
+                    if(user2.equals(userPseudo)) friendsOfUserFriends.remove(user2);
                 }
             }
+            //for (String user3 : friendsOfUserFriends) if(user3.equals(userPseudo)) friendsOfUserFriends.remove(user3);
             return friendsOfUserFriends;
         } catch (SQLException e) {
             e.printStackTrace();

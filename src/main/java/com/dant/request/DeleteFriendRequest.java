@@ -6,8 +6,8 @@ import com.dant.entity.dto.TokenDTO;
 public class DeleteFriendRequest{
 
 
-    public String userPseudo;
-    public String friendPseudo;
+    private String userPseudo;
+    private String friendPseudo;
     private String tokenKey;
 
 

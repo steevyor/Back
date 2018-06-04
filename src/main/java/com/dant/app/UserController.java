@@ -233,7 +233,7 @@ public class UserController {
                 } else {
                     return Response.status(Response.Status.FORBIDDEN).build();
                 }
-            } catch (SQLException e)     {
+            } catch (SQLException e) {
                 e.printStackTrace();
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -315,7 +315,7 @@ public class UserController {
         String userPseudo = request.getUserPseudo();
         String userFriendPseudo = request.getFriendPseudo();
         tokenDTO.setPseudo(userPseudo);
-        System.out.println("UserControler.deleteFriendship : current user = " +userPseudo +"; friend to delete = " +userFriendPseudo);
+        System.out.println("UserControler.deleteFriendship : current user = " + userPseudo + "; friend to delete = " + userFriendPseudo);
         if (isNotBlank(userPseudo) && isNotBlank(userFriendPseudo)) {
             String json = null;
             try {
@@ -459,4 +459,25 @@ public class UserController {
         } else return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @POST
+    @Path("/getFriendSuggestions")
+    public Response getFriendSuggestions(FriendSuggestionRequest friendSuggestionRequest) {
+        if (isNotBlank(friendSuggestionRequest.getUserPseudo())
+                && isNotBlank(friendSuggestionRequest.getTokenDTO().getKey())) {
+            System.out.println("UserControler.getFriendSuggestions : fields are not blank");
+            TokenDTO tokenDTO = friendSuggestionRequest.getTokenDTO();
+            tokenDTO.setPseudo(friendSuggestionRequest.getUserPseudo());
+            try {
+                if (tokenService.canUseService(tokenDTO)) {
+                    List suggestions = userService.getFriendshipPropositions(friendSuggestionRequest.getUserPseudo());
+                    tokenService.updateTokenTimer(tokenDTO);
+                    tokenService.save(tokenDTO, friendSuggestionRequest.getUserPseudo());
+                    return Response.ok(gson.toJson(suggestions), MediaType.APPLICATION_JSON).build();
+                } else return Response.status(Response.Status.FORBIDDEN).build();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }else return Response.status(Response.Status.NO_CONTENT).build();
     }
+}

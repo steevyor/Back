@@ -40,4 +40,5 @@ com\dant\entity\Coordinate.class
 com\dant\service\InvitationService.class
 com\dant\request\UserRequest.class
 com\dant\database\TokenDAO.class
+com\dant\request\FriendSuggestionRequest.class
 com\dant\request\DisconnectionRequest.class

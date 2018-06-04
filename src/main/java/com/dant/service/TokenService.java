@@ -78,6 +78,7 @@ public class TokenService {
             return false;
         }
     }
+
     public void deleteToken(TokenDTO tokenDTO) throws SQLException {
         System.out.println("TokenService.deleteToken : deleting token " +tokenDTO.getKey());
         try{
@@ -93,7 +94,8 @@ public class TokenService {
                 throw new SQLException();
             }
         }
-
         System.out.println("TokenService.deleteToken : token deleted");
     }
+
+
 }
