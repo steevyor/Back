@@ -96,7 +96,7 @@ public class UserController {
                     System.out.println("UserControler.authenticate : token successfully created !");
                     list.add(dto);
                     list.add(token);
-                    map.put("token", tokenDTO);
+                    map.put("token", tokenDTO.getKey());
                     System.out.println("UserControler.authenticate : adding data to json ");
                     json = gson.toJson(map);
                     System.out.println("UserControler.authenticate : json successfully created ! ");
@@ -147,7 +147,7 @@ public class UserController {
                     Token token = new Token();
                     System.out.println("UserControler.inscription : token successfully created");
                     list.add(dto.pseudo);
-                    list.add(token);
+                    list.add(token.getTokenKey());
                     System.out.println("UserControler.inscription : adding Data to json");
                     json = gson.toJson(list);
                     System.out.println("UserControler.inscription : json successfully created");
@@ -260,7 +260,7 @@ public class UserController {
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userdto.getPseudo());
                     HashMap map = new HashMap();
-                    map.put("token", tokenDTO);
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 }
@@ -294,7 +294,7 @@ public class UserController {
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userPseudo);
                     map.put("utilisateurs", list);
-                    map.put("token", tokenDTO);
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 } else {
@@ -326,7 +326,7 @@ public class UserController {
                     HashMap map = new HashMap();
                     tokenService.updateTokenTimer(tokenDTO);
                     tokenService.save(tokenDTO, userPseudo);
-                    map.put("token", tokenDTO);
+                    map.put("token", tokenDTO.getKey());
                     json = gson.toJson(map);
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
                 } else {
