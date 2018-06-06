@@ -22,10 +22,11 @@ public class UserDAO implements DAO<User> {
     public void save(User object) {
         System.out.println();
         try(Statement st = connection.createStatement()){
-            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email, password) VALUES(?, ?, ?);");
+            preparedStatement = connection.prepareStatement("INSERT INTO user(pseudo, email, password, image) VALUES(?, ?, ?, ?);");
             preparedStatement.setString(1, object.getPseudo());
             preparedStatement.setString(2, object.getEmail());
             preparedStatement.setString(3, object.getPassword());
+            preparedStatement.setString(4, object.getImage());
             preparedStatement.executeUpdate();
             //st.execute("INSERT INTO user(pseudo, email, password) VALUES(" +object.getPseudo() +"," +object.getEmail() +"," +object.getPassword() +");");
         } catch (SQLException e) {
@@ -45,7 +46,9 @@ public class UserDAO implements DAO<User> {
                 String pseudo = result.getString("pseudo");
                 String email = result.getString("email");
                 String password = result.getString("password");
-                User user = new User(pseudo,email,password);
+                String image = result.getString("image");
+
+                User user = new User(pseudo,email,password, image);
                 user.setCoordinate(new Coordinate(result.getDouble("xCoordinates"), result.getDouble("yCoordinates")));
                 user.setFriendList(new ArrayList<User>());
                 System.out.println("UserDAO.get : query result User = "+user.getPseudo() +";" +user.getEmail() +";" +user.getPassword() );
@@ -92,9 +95,13 @@ public class UserDAO implements DAO<User> {
             while(result.next()){
                 String pseudo = result.getString("pseudo");
                 String email = result.getString("email");
+                String image = result.getString("image");
                 Coordinate coord = new Coordinate(result.getDouble("xCoordinates"),
                         result.getDouble("yCoordinates"));
-                users.add(new User(pseudo, email));
+                User u = new User(pseudo, email);
+                u.setImage(image);
+                u.setCoordinate(coord);
+                users.add(u);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,12 +169,15 @@ public class UserDAO implements DAO<User> {
         List<User> users = new ArrayList<User>();
         ResultSet result = null;
         try(Statement st = connection.createStatement()) {
-            result = st.executeQuery("select u.xCoordinates, u.yCoordinates, friendPseudo from user u, friendship f where f.userPseudo = '" + key + "' and u.pseudo = f.friendPseudo;");
+            result = st.executeQuery("select u.xCoordinates, u.yCoordinates, friendPseudo, image from user u, friendship f where f.userPseudo = '" + key + "' and u.pseudo = f.friendPseudo;");
             while(result.next()){
                 Double x = result.getDouble("xCoordinates");
                 Double y = result.getDouble("yCoordinates");
                 String pseudo = result.getString("friendPseudo");
-                users.add(new User(pseudo, new Coordinate(x, y)));
+                String image = result.getString("image");
+                User u = new User(pseudo, new Coordinate(x, y));
+                u.setImage(image);
+                users.add(u);
             }
         } catch (SQLException e) {
             e.printStackTrace();

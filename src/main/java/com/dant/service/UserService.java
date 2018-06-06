@@ -28,7 +28,7 @@ public class UserService {
     private final FriendshipDAO friendshipdao = new FriendshipDAO();
 
     public User save(UserDTO dto) {
-        User user = new User(dto.pseudo, dto.email, dto.password);
+        User user = new User(dto.pseudo, dto.email, dto.password, dto.getImage());
         userdao.save(user);
         return user;
     }
@@ -58,7 +58,7 @@ public class UserService {
             String encryptedPassword = Encripter.encrypt(dto.password);
             System.out.println("UserService.inscription : userDTO password = " + dto.password
                     + " ; encrypted password = " + encryptedPassword);
-            userdao.save(new User(dto.pseudo, dto.email, encryptedPassword));
+            userdao.save(new User(dto.pseudo, dto.email, encryptedPassword, dto.getImage()));
             System.out.println("UserService.inscription : user saved");
             return true;
         }

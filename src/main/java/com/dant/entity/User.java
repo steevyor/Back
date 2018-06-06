@@ -14,9 +14,11 @@ public class User {
     private Boolean isVisible;
     private Coordinate coordinate;
     private String password;
+    private String image;
 
 
-    public User(String pseudo , String email, String password){
+
+    public User(String pseudo , String email, String password, String image){
 
         this.pseudo = pseudo;
         this.email = email;
@@ -26,6 +28,7 @@ public class User {
         this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = password;
+        this.image = image;
     }
 
 
@@ -39,6 +42,7 @@ public class User {
         this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = null;
+        this.image = "";
     }
 
 
@@ -51,6 +55,7 @@ public class User {
         this.invitations = new ArrayList<Invitation>();
         //a encrypter
         this.password = "";
+        this.image = "";
     }
 
     public User(String pseudo, Coordinate c) {
@@ -61,8 +66,9 @@ public class User {
         this.isVisible  = false;
         this.invitations = new ArrayList<Invitation>();
         this.coordinate = c;
-        //a encrypter
         this.password = "";
+        this.image = "";
+
     }
 
     public User() {
@@ -72,8 +78,9 @@ public class User {
         this.isConnected = false;
         this.isVisible  = false;
         this.invitations = new ArrayList<Invitation>();
-        //a encrypter
         this.password = "";
+        this.image = "";
+
     }
 
     public String getPseudo() {
@@ -83,6 +90,16 @@ public class User {
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
+
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 
     public String getEmail() {
         return email;

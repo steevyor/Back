@@ -8,6 +8,8 @@ public class SaveRequest {
     String udtoPassword;
     String udtoEmail;
     String tdtoKey;
+    String udtoImage;
+
 
 
     public SaveRequest(String udtoPseudo, String udtoPassword, String udtoEmail, String tdtoKey){
@@ -17,7 +19,7 @@ public class SaveRequest {
         this.udtoPseudo = udtoPseudo;
     }
 
-    public UserDTO getUserDTO(){ return new UserDTO(udtoPseudo, udtoEmail, udtoPassword); }
+    public UserDTO getUserDTO(){ return new UserDTO(udtoPseudo, udtoEmail, udtoPassword, udtoImage); }
 
     public TokenDTO getTokenDTO(){ return new TokenDTO(tdtoKey); }
 }
