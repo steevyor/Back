@@ -124,7 +124,8 @@ public class UserService {
                 List<String> userList = sendFriendList(user);
                 for (String user2 : userList) {
                     if (!invitationList.contains(user2)) {
-                        if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2) && !user2.equals(userPseudo)) {
+                        if (!friendsOfUserFriends.contains(user2) && !userFriends.contains(user2)
+                                && !user2.equals(userPseudo) && invitationList.contains(user2)) {
                             friendsOfUserFriends.add(user2);
                         }
                     }
